@@ -1,4 +1,4 @@
-package com.example.rentstate.profiles.api.resource;
+package com.example.rentstate.profiles.api.resource.userresource;
 
 import lombok.Data;
 import lombok.Getter;

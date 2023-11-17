@@ -1,9 +1,8 @@
 package com.example.rentstate.profiles.api.rest;
 
-
-import com.example.rentstate.profiles.api.resource.CreateUserResource;
-import com.example.rentstate.profiles.api.resource.ResourceUserResponse;
-import com.example.rentstate.profiles.api.resource.UpdateUserResource;
+import com.example.rentstate.profiles.api.resource.userresource.CreateUserResource;
+import com.example.rentstate.profiles.api.resource.userresource.ResourceUserResponse;
+import com.example.rentstate.profiles.api.resource.userresource.UpdateUserResource;
 import com.example.rentstate.profiles.domain.model.aggregates.User;
 import com.example.rentstate.profiles.domain.model.valueobjects.Account;
 import com.example.rentstate.profiles.domain.service.UserService;

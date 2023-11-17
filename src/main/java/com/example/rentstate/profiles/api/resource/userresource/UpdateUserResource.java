@@ -1,4 +1,4 @@
-package com.example.rentstate.profiles.api.resource;
+package com.example.rentstate.profiles.api.resource.userresource;
 
 import com.example.rentstate.profiles.domain.model.aggregates.User;
 import lombok.Data;
