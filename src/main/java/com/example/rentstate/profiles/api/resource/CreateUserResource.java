@@ -1,11 +1,12 @@
 package com.example.rentstate.profiles.api.resource;
 
-import com.example.rentstate.profiles.domain.model.valueobjects.Account;
 import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Data
 @Getter
+@NoArgsConstructor
 public class CreateUserResource {
     private String name;
     private String lastName;

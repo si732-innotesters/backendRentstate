@@ -3,10 +3,12 @@ package com.example.rentstate.profiles.api.resource;
 import com.example.rentstate.profiles.domain.model.aggregates.User;
 import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Data
 @Getter
-public class ResponseUserResource {
+@NoArgsConstructor
+public class ResourceUserResponse {
     private Long id;
     private String name;
     private String lastName;
@@ -15,7 +17,7 @@ public class ResponseUserResource {
     private String description;
     private Boolean isPremium;
 
-    public ResponseUserResource(User user) {
+    public ResourceUserResponse(User user) {
         this.id = user.getId();
         this.name = user.getName();
         this.lastName = user.getLastName();

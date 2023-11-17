@@ -2,7 +2,8 @@ package com.example.rentstate.profiles.api.rest;
 
 
 import com.example.rentstate.profiles.api.resource.CreateUserResource;
-import com.example.rentstate.profiles.api.resource.ResponseUserResource;
+import com.example.rentstate.profiles.api.resource.ResourceUserResponse;
+import com.example.rentstate.profiles.api.resource.UpdateUserResource;
 import com.example.rentstate.profiles.domain.model.aggregates.User;
 import com.example.rentstate.profiles.domain.model.valueobjects.Account;
 import com.example.rentstate.profiles.domain.service.UserService;
@@ -11,7 +12,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @CrossOrigin(origins = {"*"})
 @RestController
@@ -28,8 +31,7 @@ public class UserController {
 
 
     @PostMapping
-    public ResponseEntity<ResponseUserResource> createUser(@RequestBody CreateUserResource createUserResource) {
-        ModelMapper modelMapper = new ModelMapper();
+    public ResponseEntity<ResourceUserResponse> createUser(@RequestBody CreateUserResource createUserResource) {;
         User newUser = modelMapper.map(createUserResource, User.class);
 
         Account account = new Account(createUserResource.getEmail(), createUserResource.getPassword());
@@ -38,12 +40,48 @@ public class UserController {
         Optional<User> createdUser = userService.create(newUser);
 
         if (createdUser.isPresent()) {
-            ResponseUserResource responseUserResource = new ResponseUserResource(createdUser.get());
+            ResourceUserResponse responseUserResource = new ResourceUserResponse(createdUser.get());
             return ResponseEntity.status(HttpStatus.CREATED).body(responseUserResource);
         } else {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
+    @GetMapping
+    public List<ResourceUserResponse> getAllUsers() {
+        List<User> users = userService.getAll();
+        List<ResourceUserResponse> responseUsers= users.stream()
+                .map(user -> modelMapper.map(user, ResourceUserResponse.class))
+                .collect(Collectors.toList());
 
+        return responseUsers;
+    }
+
+    @GetMapping("{userId}")
+    public ResponseEntity<ResourceUserResponse> getUserById(@PathVariable Long userId) {
+        Optional<User> user = userService.getById(userId);
+
+        ResourceUserResponse userResponse = new ResourceUserResponse(user.get());
+        return ResponseEntity.status(HttpStatus.FOUND).body(userResponse);
+    }
+
+    @PutMapping
+    public ResponseEntity<ResourceUserResponse> updateUser(@RequestBody UpdateUserResource updateUserResource) {
+
+        User userToUpdate = modelMapper.map(updateUserResource, User.class);
+
+        Optional<User> userUpdate = userService.update(userToUpdate);
+
+        if(userUpdate.isEmpty()){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+        ResourceUserResponse userResponse = new ResourceUserResponse(userUpdate.get());
+        return ResponseEntity.ok(userResponse);
+    }
+
+    @DeleteMapping("{userId}")
+    public ResponseEntity<?> deleteUser(@PathVariable Long userId) {
+        userService.delete(userId);
+        return ResponseEntity.noContent().build();
+    }
 }

@@ -44,12 +44,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<User> update(User user) {
-
         return Optional.ofNullable(userRepository.findById(user.getId()).map(userToUpdate ->
                         userRepository.save(userToUpdate
                                 .withName(user.getName())
                                 .withLastName(user.getLastName())
-                                .withAccount(user.getAccount())
                                 .withAge(user.getAge())
                                 .withGender(user.getGender())
                                 .withDescription(user.getDescription())
