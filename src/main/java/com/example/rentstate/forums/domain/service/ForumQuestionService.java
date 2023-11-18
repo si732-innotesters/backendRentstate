@@ -1,7 +1,6 @@
 package com.example.rentstate.forums.domain.service;
 
-import com.example.rentstate.forums.domain.model.aggregates.ForumAnswer;
-import com.example.rentstate.forums.domain.model.aggregates.ForumQuestion;
+import com.example.rentstate.forums.domain.model.entities.ForumQuestion;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;

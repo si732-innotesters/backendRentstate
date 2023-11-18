@@ -1,6 +1,6 @@
 package com.example.rentstate.forums.shared.services.implementation;
 
-import com.example.rentstate.forums.domain.model.aggregates.ForumQuestion;
+import com.example.rentstate.forums.domain.model.entities.ForumQuestion;
 import com.example.rentstate.forums.domain.service.ForumQuestionService;
 import com.example.rentstate.forums.infraestructure.persistence.jpa.repositories.ForumAnswerRepository;
 import com.example.rentstate.forums.infraestructure.persistence.jpa.repositories.ForumQuestionRepository;
@@ -17,10 +17,7 @@ public class ForumQuestionServiceImpl implements ForumQuestionService {
 
     private final ForumQuestionRepository forumQuestionRepository;
     private final ForumAnswerRepository forumAnswerRepository;
-
     private final UserRepository userRepository;
-
-
 
     public ForumQuestionServiceImpl(ForumAnswerRepository forumAnswerRepository, ForumQuestionRepository forumQuestionRepository, UserRepository userRepository) {
         this.forumAnswerRepository = forumAnswerRepository;
@@ -41,12 +38,14 @@ public class ForumQuestionServiceImpl implements ForumQuestionService {
 
     @Override
     public Optional<ForumQuestion> create(ForumQuestion forumQuestion) {
+        return Optional.of(forumQuestionRepository.save(forumQuestion));
     }
 
 
     @Override
     public Optional<ForumQuestion> update(ForumQuestion forumQuestion) {
-        return Optional.ofNullable(forumQuestionRepository.findById(forumQuestion.getId()).map(forumQuestionToUpdate ->
+        return Optional.ofNullable(forumQuestionRepository.findById(forumQuestion.getId())
+                .map(forumQuestionToUpdate ->
                         forumQuestionRepository.save(forumQuestionToUpdate
                                 .withQuestion(forumQuestion.getQuestion())
                         ))

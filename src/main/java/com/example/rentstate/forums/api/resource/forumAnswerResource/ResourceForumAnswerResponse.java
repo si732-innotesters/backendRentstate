@@ -1,6 +1,6 @@
 package com.example.rentstate.forums.api.resource.forumAnswerResource;
 
-import com.example.rentstate.forums.domain.model.aggregates.ForumAnswer;
+import com.example.rentstate.forums.domain.model.entities.ForumAnswer;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,17 +10,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ResourceForumAnswerResponse {
 
-    private Long id;
     private Long questionId;
-    private Long authorId;
+    private String authorName;
     private String content;
 
     public ResourceForumAnswerResponse(ForumAnswer forumAnswer) {
-        this.id = forumAnswer.getId();
-        this.questionId=forumAnswer.getQuestionId();
-        this.authorId=forumAnswer.getAuthorId();
+        this.questionId=forumAnswer.getQuestion().getId();
+        this.authorName=forumAnswer.getAuthor().getName()+ " "+forumAnswer.getAuthor().getLastName();
         this.content=forumAnswer.getContent();
-
     }
 
 }

@@ -1,6 +1,6 @@
 package com.example.rentstate.forums.api.resource.forumQuestionResource;
 
-import com.example.rentstate.forums.domain.model.aggregates.ForumQuestion;
+import com.example.rentstate.forums.domain.model.entities.ForumQuestion;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,11 +12,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class UpdateForumQuestionResource {
 
+    private Long id;
     private String question;
 
-    public UpdateForumQuestionResource(ForumQuestion forumQuestion) {
-        this.question=forumQuestion.getQuestion();
-
-
-    }
 }

@@ -7,8 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @Getter
 @NoArgsConstructor
-
 public class CreateForumQuestionResource {
-
+    private Long authorId;
     private String question;
 }
