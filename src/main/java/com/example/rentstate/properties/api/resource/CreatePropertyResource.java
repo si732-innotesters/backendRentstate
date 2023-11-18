@@ -1,6 +1,6 @@
-package com.example.rentstate.posts.api.resource;
+package com.example.rentstate.properties.api.resource;
 
-import com.example.rentstate.profiles.domain.model.aggregates.User;
+import com.example.rentstate.properties.domain.model.valueobjects.Categories;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,8 +13,8 @@ public class CreatePropertyResource {
     private String description;
     private String characteristics;
     private String location;
-    private String category;
+    private Categories category;
     private boolean available;
-    private User renterId;
-    private User authorId;
+    private Long authorId;
+    private Long renterId;
 }

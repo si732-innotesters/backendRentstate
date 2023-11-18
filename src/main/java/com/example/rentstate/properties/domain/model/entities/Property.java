@@ -1,7 +1,8 @@
-package com.example.rentstate.posts.domain.model.entities;
+package com.example.rentstate.properties.domain.model.entities;
 
-import com.example.rentstate.posts.api.resource.CreatePropertyResource;
+import com.example.rentstate.properties.api.resource.CreatePropertyResource;
 import com.example.rentstate.profiles.domain.model.aggregates.User;
+import com.example.rentstate.properties.domain.model.valueobjects.Categories;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -14,8 +15,9 @@ import lombok.*;
 @Getter
 @Setter
 @With
-@Table(name = "Properties")
+@Table(name = "properties")
 public class Property {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
@@ -41,31 +43,29 @@ public class Property {
     private String location;
 
     @NotNull
-    @NotBlank
-    @Size(max = 100)
-    private String category;
+    private Categories category;
 
     @NotNull
     private Boolean available;
 
-    @NotNull
     @ManyToOne
-    @JoinColumn(name = "renter_id", nullable = false)
-    private User renterId;
+    @JoinColumn(name = "renter_id", nullable = true)
+    private User renter;
 
     @NotNull
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User authorId;
+    @JoinColumn(name = "author_id")
+    private User author;
 
-    public Property(User authorId, CreatePropertyResource createPropertyResource, User renterId) {
+    public Property(User author, User renter, CreatePropertyResource createPropertyResource) {
         this.name = createPropertyResource.getName();
         this.description = createPropertyResource.getDescription();
         this.characteristics = createPropertyResource.getCharacteristics();
         this.location = createPropertyResource.getLocation();
         this.category = createPropertyResource.getCategory();
         this.available = createPropertyResource.isAvailable();
-        this.renterId = renterId;
-        this.authorId = authorId;
+        this.renter= renter;
+        this.author = author;
     }
+
 }

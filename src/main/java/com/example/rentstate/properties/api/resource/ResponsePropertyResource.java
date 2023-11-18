@@ -1,28 +1,28 @@
-package com.example.rentstate.posts.api.resource;
+package com.example.rentstate.properties.api.resource;
 
-import com.example.rentstate.posts.domain.model.entities.Property;
+import com.example.rentstate.properties.domain.model.entities.Property;
 import com.example.rentstate.profiles.domain.model.aggregates.User;
+import com.example.rentstate.properties.domain.model.valueobjects.Categories;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @Getter
 @NoArgsConstructor
-public class PropertyResource {
+public class ResponsePropertyResource {
+
     private Long Id;
     private String name;
     private String description;
     private String characteristics;
     private String location;
-    private String category;
+    private Categories category;
     private boolean available;
-    private User renterId;
-    private User authorId;
+    private Long authorId;
+    private Long renterId;
 
-    public PropertyResource(Property property) {
+    public ResponsePropertyResource(Property property) {
         Id = property.getId();
         this.name = property.getName();
         this.description = property.getDescription();
@@ -30,7 +30,13 @@ public class PropertyResource {
         this.location = property.getLocation();
         this.category = property.getCategory();
         this.available = property.getAvailable();
-        this.renterId = property.getRenterId();
-        this.authorId = property.getAuthorId();
+        this.authorId = property.getAuthor().getId();
+
+        if (property.getRenter() != null) {
+            this.renterId = property.getRenter().getId();
+        }else{
+            this.renterId = null;
+        }
     }
+
 }
