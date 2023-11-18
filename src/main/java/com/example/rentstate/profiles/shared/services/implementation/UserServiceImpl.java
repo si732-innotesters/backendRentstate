@@ -1,6 +1,7 @@
 package com.example.rentstate.profiles.shared.services.implementation;
 
 import com.example.rentstate.profiles.domain.model.aggregates.User;
+import com.example.rentstate.profiles.domain.model.valueobjects.Account;
 import com.example.rentstate.profiles.domain.service.UserService;
 import com.example.rentstate.profiles.infrastructure.persistence.jpa.repositories.UserRepository;
 import com.example.rentstate.shared.exceptions.ResourceNotFoundException;
@@ -52,6 +53,7 @@ public class UserServiceImpl implements UserService {
                                 .withGender(user.getGender())
                                 .withDescription(user.getDescription())
                                 .withIsPremium(user.getIsPremium())
+                                .withPhotoUrl(user.getPhotoUrl())
                         ))
                 .orElseThrow(() -> new ResourceNotFoundException("User", user.getId())));
     }
@@ -62,5 +64,12 @@ public class UserServiceImpl implements UserService {
                     userRepository.delete(user);
                     return ResponseEntity.ok().build();})
                 .orElseThrow(() -> new ResourceNotFoundException("User", userId));
+    }
+
+    @Override
+    public Optional<User> login(Account account) {
+        Optional<User> user = userRepository.findByAccount(account);
+
+        return user;
     }
 }

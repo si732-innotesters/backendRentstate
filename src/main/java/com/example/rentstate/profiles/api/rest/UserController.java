@@ -1,5 +1,6 @@
 package com.example.rentstate.profiles.api.rest;
 
+import com.example.rentstate.profiles.api.resource.login.LoginCredential;
 import com.example.rentstate.profiles.api.resource.userresource.CreateUserResource;
 import com.example.rentstate.profiles.api.resource.userresource.ResourceUserResponse;
 import com.example.rentstate.profiles.api.resource.userresource.UpdateUserResource;
@@ -61,7 +62,7 @@ public class UserController {
         Optional<User> user = userService.getById(userId);
 
         ResourceUserResponse userResponse = new ResourceUserResponse(user.get());
-        return ResponseEntity.status(HttpStatus.FOUND).body(userResponse);
+        return ResponseEntity.ok(userResponse);
     }
 
     @PutMapping
@@ -82,5 +83,15 @@ public class UserController {
     public ResponseEntity<?> deleteUser(@PathVariable Long userId) {
         userService.delete(userId);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<ResourceUserResponse> login(@RequestBody LoginCredential loginCredential) {
+
+        Account account = new Account(loginCredential.getEmail(), loginCredential.getPassword());
+
+        Optional<User> user = userService.login(account);
+
+        return ResponseEntity.ok(new ResourceUserResponse(user.get()));
     }
 }

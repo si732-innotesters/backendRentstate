@@ -18,6 +18,7 @@ public class UpdateUserResource {
     private String gender;
     private String description;
     private Boolean isPremium;
+    private String photoUrl;
 
     public UpdateUserResource(User user) {
         this.id = user.getId();
@@ -27,5 +28,6 @@ public class UpdateUserResource {
         this.gender = user.getGender();
         this.description = user.getDescription();
         this.isPremium = user.getIsPremium();
+        this.photoUrl = user.getPhotoUrl();
     }
 }

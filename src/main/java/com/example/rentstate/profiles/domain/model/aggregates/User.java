@@ -42,4 +42,6 @@ public class User {
     @NotNull
     private Boolean isPremium = false;
 
+    private String photoUrl = "";
+
 }
