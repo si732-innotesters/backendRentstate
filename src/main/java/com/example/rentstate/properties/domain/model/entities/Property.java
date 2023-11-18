@@ -66,6 +66,7 @@ public class Property {
         this.location = createPropertyResource.getLocation();
         this.category = createPropertyResource.getCategory();
         this.available = createPropertyResource.isAvailable();
+        this.urlImg = createPropertyResource.getUrlImg();
         this.renter= renter;
         this.author = author;
     }
