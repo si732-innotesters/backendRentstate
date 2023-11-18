@@ -1,5 +1,6 @@
 package com.example.rentstate.forums.api.rest;
 
+import com.example.rentstate.forums.api.resource.forumAnswerResource.ResourceForumAnswerResponse;
 import com.example.rentstate.forums.api.resource.forumQuestionResource.CreateForumQuestionResource;
 import com.example.rentstate.forums.api.resource.forumQuestionResource.ResourceForumQuestionResponse;
 import com.example.rentstate.forums.domain.model.entities.ForumQuestion;
@@ -11,7 +12,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @CrossOrigin(origins = {"*"})
 @RestController
@@ -45,6 +48,16 @@ public class ForumQuestionController {
         } else {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
+    }
+
+    @GetMapping
+    public List<ResourceForumQuestionResponse> getAllQuestion(){
+        List<ForumQuestion>questions = forumQuestionService.getAll();
+
+        List<ResourceForumQuestionResponse> questionResponses = questions.stream()
+                .map(question -> new ResourceForumQuestionResponse(question))
+                .collect(Collectors.toList());
+        return questionResponses;
     }
 
     @GetMapping("{forumQuestionId}")
