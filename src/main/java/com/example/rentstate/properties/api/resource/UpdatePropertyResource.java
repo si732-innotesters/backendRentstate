@@ -19,6 +19,7 @@ public class UpdatePropertyResource {
     private String characteristics;
     private String location;
     private Categories category;
+    private String urlImg;
     private boolean available;
     private Long renterId;
 }

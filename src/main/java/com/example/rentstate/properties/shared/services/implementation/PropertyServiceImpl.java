@@ -56,6 +56,7 @@ public class PropertyServiceImpl implements PropertyService {
                                 .withAvailable(resource.isAvailable())
                                 .withCharacteristics(resource.getCharacteristics())
                                 .withLocation(resource.getLocation())
+                                .withUrlImg(resource.getUrlImg())
                         ))
                 .orElseThrow(()->new ResourceNotFoundException("Property", resource.getId()))));
     }

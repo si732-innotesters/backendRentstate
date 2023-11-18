@@ -48,6 +48,8 @@ public class Property {
     @NotNull
     private Boolean available;
 
+    private String urlImg;
+
     @ManyToOne
     @JoinColumn(name = "renter_id", nullable = true)
     private User renter;

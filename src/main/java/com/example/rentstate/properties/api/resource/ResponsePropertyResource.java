@@ -21,6 +21,7 @@ public class ResponsePropertyResource {
     private boolean available;
     private Long authorId;
     private Long renterId;
+    private String urlImg;
 
     public ResponsePropertyResource(Property property) {
         Id = property.getId();
@@ -30,6 +31,7 @@ public class ResponsePropertyResource {
         this.location = property.getLocation();
         this.category = property.getCategory();
         this.available = property.getAvailable();
+        this.urlImg = property.getUrlImg();
         this.authorId = property.getAuthor().getId();
 
         if (property.getRenter() != null) {

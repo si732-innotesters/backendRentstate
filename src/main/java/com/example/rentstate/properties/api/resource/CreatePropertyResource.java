@@ -14,6 +14,7 @@ public class CreatePropertyResource {
     private String characteristics;
     private String location;
     private Categories category;
+    private String urlImg;
     private boolean available;
     private Long authorId;
     private Long renterId;
