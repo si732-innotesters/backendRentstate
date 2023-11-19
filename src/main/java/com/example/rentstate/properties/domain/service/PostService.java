@@ -1,5 +1,6 @@
 package com.example.rentstate.properties.domain.service;
 
+import com.example.rentstate.profiles.domain.model.aggregates.User;
 import com.example.rentstate.properties.domain.model.entities.Post;
 import org.springframework.http.ResponseEntity;
 
@@ -12,5 +13,5 @@ public interface PostService {
     Optional<Post> create(Post post);
     Optional<Post> update(Post post);
     ResponseEntity<?> delete(Long postId);
-    //List<Post> getPostsByAuthorId(User userId);
+    List<Post> getPostsByAuthor(User author);
 }

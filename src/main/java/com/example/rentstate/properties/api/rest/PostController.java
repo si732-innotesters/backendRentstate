@@ -1,17 +1,24 @@
 package com.example.rentstate.properties.api.rest;
 
-import com.example.rentstate.properties.api.resource.postResource.PostResource;
+import com.example.rentstate.profiles.domain.model.aggregates.User;
+import com.example.rentstate.profiles.domain.service.UserService;
+import com.example.rentstate.properties.api.resource.commentResource.CommentResponse;
+import com.example.rentstate.properties.api.resource.commentResource.CreateCommentResource;
+import com.example.rentstate.properties.api.resource.postResource.CreatePostResource;
 import com.example.rentstate.properties.api.resource.postResource.PostResponse;
 import com.example.rentstate.properties.api.resource.postResource.UpdatePostResource;
+import com.example.rentstate.properties.domain.model.entities.Comment;
 import com.example.rentstate.properties.domain.model.entities.Post;
+import com.example.rentstate.properties.domain.model.entities.Property;
+import com.example.rentstate.properties.domain.service.CommentService;
 import com.example.rentstate.properties.domain.service.PostService;
 import com.example.rentstate.properties.domain.service.PropertyService;
-import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @CrossOrigin(origins = {"*"})
@@ -19,22 +26,26 @@ import java.util.stream.Collectors;
 @RequestMapping(value = "/api/v1/posts", produces = "application/json")
 public class PostController {
     private final PostService postService;
-    private final ModelMapper postMapper;
     private final PropertyService propertyService;
+    private final CommentService commentService;
+    private final UserService userService;
 
 
-    public PostController(PostService postService, PropertyService propertyService, ModelMapper postMapper) {
+    public PostController(PostService postService, PropertyService propertyService, CommentService commentService, UserService userService) {
         this.postService = postService;
         this.propertyService = propertyService;
-        this.postMapper = postMapper;
+        this.commentService = commentService;
+        this.userService = userService;
     }
     @PostMapping
-    public ResponseEntity<PostResponse> createPost(@RequestBody PostResource resource ){
-        var propertyId = propertyService.getById(resource.getPropertyId());
-        if(propertyId.isEmpty()){
+    public ResponseEntity<PostResponse> createPost(@RequestBody CreatePostResource createPostResource ){
+        Optional<Property> property = propertyService.getById(createPostResource.getPropertyId());
+
+        if(property.isEmpty()){
             return ResponseEntity.badRequest().build();
         }
-        Post newPost = new Post(propertyId.get(),resource);
+
+        Post newPost = new Post(property.get(),createPostResource);
         var post = postService.create(newPost);
         if(post.isPresent()){
             var postResponse = new PostResponse(post.get());
@@ -46,10 +57,11 @@ public class PostController {
     @GetMapping
     public List<PostResponse> getAll() {
         List<Post>posts = postService.getAllPosts();
-        List<PostResponse>postResponse = posts.stream()
-                .map(post -> postMapper.map(post, PostResponse.class))
-                .collect(Collectors.toList());
-        return postResponse;
+
+        List<PostResponse> responseList = posts.stream()
+                .map(post -> new PostResponse(post)).collect(Collectors.toList());
+
+        return responseList;
     }
     @GetMapping("{postId}")
     public  ResponseEntity<PostResponse> getPostById(@PathVariable Long postId){
@@ -58,9 +70,14 @@ public class PostController {
         return ResponseEntity.ok(postResponse);
     }
     @PutMapping
-    public ResponseEntity<PostResponse> updatePost(@RequestBody UpdatePostResource resource){
-        var post = postMapper.map(resource, Post.class);
-        var updatePost = postService.update(post);
+    public ResponseEntity<PostResponse> updatePost(@RequestBody UpdatePostResource updatePostResource){
+
+        Optional<Post> post = postService.getById(updatePostResource.getId());
+
+        if(post.isEmpty())
+            throw new IllegalArgumentException("post nor found");
+
+        var updatePost = postService.update(post.get());
         if(updatePost.isEmpty()){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
@@ -73,4 +90,38 @@ public class PostController {
         return ResponseEntity.noContent().build();
     }
 
+    //comments section
+    @PostMapping("/add-comment")
+    public ResponseEntity<CommentResponse> addComment(@RequestBody CreateCommentResource createCommentResource){
+        Optional<User> author = userService.getById(createCommentResource.getUserId());
+        Optional<Post> post = postService.getById(createCommentResource.getPostId());
+
+        if(author.isEmpty() || post.isEmpty())
+            throw new IllegalArgumentException("author or post not found");
+
+        Comment newComment = new Comment(author.get(), post.get(), createCommentResource);
+        Optional<Comment> comment = commentService.create(newComment);
+
+        if(comment.isPresent()){
+            CommentResponse commentResponse = new CommentResponse(comment.get());
+            return ResponseEntity.status(HttpStatus.CREATED).body(commentResponse);
+        }else{
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @GetMapping("/comment/post-id/{postId}")
+    public List<CommentResponse> getAllCommentByPostId(@PathVariable Long postId){
+        Optional<Post> post = postService.getById(postId);
+
+        if(post.isEmpty())
+            throw new IllegalArgumentException("Post not found");
+
+        List<Comment>comments = commentService.getCommentsByPost(post.get());
+
+        List<CommentResponse> responseList = comments.stream()
+                .map(comment -> new CommentResponse(comment)).collect(Collectors.toList());
+
+        return  responseList;
+    }
 }

@@ -94,4 +94,28 @@ public class PropertyController {
     }
 
 
+    //reservations
+    @RequestMapping(value = "/reservation/property-id/{propertyId}/user-id/{userId}",
+            method = {RequestMethod.POST, RequestMethod.DELETE})
+    public ResponseEntity<?> manageReservation(
+            @PathVariable Long propertyId, @PathVariable Long userId,
+            @RequestParam String action) {
+
+        Optional<Property> property = propertyService.getById(propertyId);
+        Optional<User> author = userService.getById(userId);
+
+        if (author.isEmpty() || property.isEmpty())
+            throw new IllegalArgumentException("Author or Property not found");
+
+        if ("add".equalsIgnoreCase(action)) {
+            propertyService.reserveProperty(property.get(), author.get());
+        } else if ("remove".equalsIgnoreCase(action)) {
+            propertyService.cancelReservation(property.get(), author.get());
+        } else {
+            throw new IllegalArgumentException("Invalid action. Use 'add' or 'remove'.");
+        }
+
+        return ResponseEntity.noContent().build();
+    }
+
 }

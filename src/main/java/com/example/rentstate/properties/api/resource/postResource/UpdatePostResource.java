@@ -11,7 +11,6 @@ import lombok.Setter;
 @NoArgsConstructor
 public class UpdatePostResource {
     private Long id;
-    private Long propertyId;
     private String title;
     private Double price;
 

@@ -11,14 +11,10 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class CommentResponse {
-    private Long commentId;
-    private Long userId;
-    private Long postId;
+    private String nameAuthor;
     private String content;
     public CommentResponse(Comment comment) {
-        this.commentId = comment.getId();
-        this.userId = comment.getUser().getId();
-        this.postId = comment.getPost().getId();
+        this.nameAuthor = comment.getAuthor().getName()+" "+comment.getAuthor().getLastName();
         this.content = comment.getContent();
     }
 }

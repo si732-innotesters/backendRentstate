@@ -9,6 +9,9 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
@@ -50,7 +53,7 @@ public class Property {
 
     private String urlImg;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "renter_id", nullable = true)
     private User renter;
 
@@ -58,6 +61,14 @@ public class Property {
     @ManyToOne
     @JoinColumn(name = "author_id")
     private User author;
+
+    @ManyToMany
+    @JoinTable(
+            name = "property_reservations",
+            joinColumns = @JoinColumn(name = "property_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private Set<User> reservedByUsers = new HashSet<>();
 
     public Property(User author, User renter, CreatePropertyResource createPropertyResource) {
         this.name = createPropertyResource.getName();

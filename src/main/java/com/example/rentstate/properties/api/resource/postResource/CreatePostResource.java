@@ -9,7 +9,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class PostResource {
+public class CreatePostResource {
+
     private Long propertyId;
     private String title;
     private Double price;

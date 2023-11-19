@@ -1,4 +1,4 @@
-package com.example.rentstate.properties.api.resource.reservationResource;
+package com.example.rentstate.properties.api.resource.commentResource;
 
 import lombok.Data;
 import lombok.Getter;
@@ -9,7 +9,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class ReservationResource {
+public class CreateCommentResource {
     private Long userId;
-    private Long propertyId;
+    private Long postId;
+    private String content;
 }

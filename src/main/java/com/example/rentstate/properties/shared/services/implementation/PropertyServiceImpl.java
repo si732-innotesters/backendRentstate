@@ -7,6 +7,7 @@ import com.example.rentstate.properties.domain.service.PropertyService;
 import com.example.rentstate.properties.infraestructure.persistence.jpa.repositories.PropertyRepository;
 import com.example.rentstate.profiles.domain.model.aggregates.User;
 import com.example.rentstate.shared.exceptions.ResourceNotFoundException;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -73,5 +74,23 @@ public class PropertyServiceImpl implements PropertyService {
     @Override
     public List<Property> getAvailableProperty(Boolean available) {
         return propertyRepository.findAllByAvailable(available);
+    }
+
+
+    @Override
+    public ResponseEntity<?> reserveProperty(Property property, User user) {
+
+        property.getReservedByUsers().add(user);
+        propertyRepository.save(property);
+        return ResponseEntity.noContent().build();
+    }
+
+    @Override
+    public ResponseEntity<?> cancelReservation(Property property, User user) {
+
+        property.getReservedByUsers().remove(user);
+        propertyRepository.save(property);
+
+        return ResponseEntity.noContent().build();
     }
 }

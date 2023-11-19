@@ -1,9 +1,12 @@
 package com.example.rentstate.properties.domain.model.entities;
 
-import com.example.rentstate.properties.api.resource.postResource.PostResource;
+import com.example.rentstate.properties.api.resource.postResource.CreatePostResource;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @AllArgsConstructor
@@ -19,7 +22,7 @@ public class Post {
 
     @OneToOne
     @JoinColumn(name="property_id", nullable = false)
-    private Property propertyId;
+    private Property property;
 
     @Size(max = 100, message = "max 100 characters")
     @NotNull
@@ -30,8 +33,11 @@ public class Post {
     @NotNull
     private Double price;
 
-    public Post(Property propertyId, PostResource postResource) {
-        this.propertyId = propertyId;
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    private List<Comment> comments = new ArrayList<>();
+
+    public Post(Property property, CreatePostResource postResource) {
+        this.property = property;
         this.title = postResource.getTitle();
         this.price = postResource.getPrice();
     }

@@ -17,4 +17,6 @@ public interface PropertyService {
     List<Property> getByAuthor(User author);
     List<Property> getAvailableProperty(Boolean available);
 
+    ResponseEntity<?> reserveProperty(Property property, User user);
+    ResponseEntity<?> cancelReservation(Property property, User user);
 }

@@ -18,7 +18,7 @@ public class PostResponse {
 
     public PostResponse(Post post) {
         this.id = post.getId();
-        this.propertyId = post.getPropertyId().getId();
+        this.propertyId = post.getProperty().getId();
         this.title = post.getTitle();
         this.price = post.getPrice();
     }

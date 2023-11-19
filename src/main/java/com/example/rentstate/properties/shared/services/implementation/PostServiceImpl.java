@@ -1,8 +1,10 @@
 package com.example.rentstate.properties.shared.services.implementation;
 
+import com.example.rentstate.profiles.domain.model.aggregates.User;
 import com.example.rentstate.properties.domain.model.entities.Post;
 import com.example.rentstate.properties.domain.service.PostService;
 import com.example.rentstate.properties.infraestructure.persistence.jpa.repositories.PostRepository;
+import com.example.rentstate.properties.infraestructure.persistence.jpa.repositories.PropertyRepository;
 import com.example.rentstate.shared.exceptions.ResourceNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -30,8 +32,8 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Optional<Post> create(Post post) {
-        Long propertyId = post.getPropertyId().getId();
-        if(postRepository.existsById(propertyId)){
+
+        if(postRepository.existsByProperty(post.getProperty()) ){
             throw new IllegalArgumentException("Post with same property id already exists");
         }
         return Optional.of(postRepository.save(post));
@@ -52,6 +54,11 @@ public class PostServiceImpl implements PostService {
                     postRepository.delete(post);
                     return ResponseEntity.ok().build();})
                 .orElseThrow(() -> new ResourceNotFoundException("Post", postId));
+    }
+
+    @Override
+    public List<Post> getPostsByAuthor(User author) {
+        return postRepository.getAllByPropertyAuthor(author);
     }
 
 }
