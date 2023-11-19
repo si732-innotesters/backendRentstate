@@ -26,6 +26,9 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     public Optional<Reservation> create(Reservation reservation) {
         if (reservation.getProperty().getAvailable() != null && reservation.getProperty().getAvailable()) {
+            if(reservation.getProperty().getAuthor().equals(reservation.getUser())){
+                throw new IllegalArgumentException("Authors cannot reserve their own properties");
+            }
             return Optional.of(reservationRepository.save(reservation));
         } else {
             throw new IllegalArgumentException("Property is not available");
