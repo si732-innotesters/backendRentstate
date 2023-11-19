@@ -1,6 +1,6 @@
 package com.example.rentstate.properties.domain.model.entities;
 
-import com.example.rentstate.properties.api.resource.CreatePropertyResource;
+import com.example.rentstate.properties.api.resource.propertyResource.CreatePropertyResource;
 import com.example.rentstate.profiles.domain.model.aggregates.User;
 import com.example.rentstate.properties.domain.model.valueobjects.Categories;
 import jakarta.persistence.*;

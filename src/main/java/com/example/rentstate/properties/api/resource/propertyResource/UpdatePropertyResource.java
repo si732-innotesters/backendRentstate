@@ -1,6 +1,5 @@
-package com.example.rentstate.properties.api.resource;
+package com.example.rentstate.properties.api.resource.propertyResource;
 
-import com.example.rentstate.profiles.domain.model.aggregates.User;
 import com.example.rentstate.properties.domain.model.valueobjects.Categories;
 import lombok.Data;
 import lombok.Getter;

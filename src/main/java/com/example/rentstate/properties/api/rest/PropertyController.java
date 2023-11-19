@@ -1,10 +1,8 @@
 package com.example.rentstate.properties.api.rest;
 
-import com.example.rentstate.profiles.api.resource.userresource.ResourceUserResponse;
-import com.example.rentstate.profiles.api.resource.userresource.UpdateUserResource;
-import com.example.rentstate.properties.api.resource.CreatePropertyResource;
-import com.example.rentstate.properties.api.resource.ResponsePropertyResource;
-import com.example.rentstate.properties.api.resource.UpdatePropertyResource;
+import com.example.rentstate.properties.api.resource.propertyResource.CreatePropertyResource;
+import com.example.rentstate.properties.api.resource.propertyResource.ResponsePropertyResource;
+import com.example.rentstate.properties.api.resource.propertyResource.UpdatePropertyResource;
 import com.example.rentstate.properties.domain.model.entities.Property;
 import com.example.rentstate.properties.domain.service.PropertyService;
 import com.example.rentstate.profiles.domain.model.aggregates.User;
