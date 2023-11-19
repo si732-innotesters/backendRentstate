@@ -70,4 +70,8 @@ public class PropertyServiceImpl implements PropertyService {
         return propertyRepository.findAllByAuthor(author);
     }
 
+    @Override
+    public List<Property> getAvailableProperty() {
+        return propertyRepository.findAllByIsAvailable();
+    }
 }
