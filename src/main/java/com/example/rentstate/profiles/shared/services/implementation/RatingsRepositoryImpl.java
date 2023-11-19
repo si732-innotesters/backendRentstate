@@ -34,7 +34,7 @@ public class RatingsRepositoryImpl implements RatingService {
             throw new IllegalArgumentException("Invalid rating value");
         }
 
-        Optional<Rating> existingRating = ratingsRepository. findByRatedUserAndRatedByUser(
+        Optional<Rating> existingRating = ratingsRepository.findByRatedUserAndRatedByUser(
                 ratings.getRatedUser(), ratings.getRatedByUser());
 
         if (existingRating.isPresent()) {
