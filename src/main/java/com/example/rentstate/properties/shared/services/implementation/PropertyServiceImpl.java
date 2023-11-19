@@ -71,7 +71,7 @@ public class PropertyServiceImpl implements PropertyService {
     }
 
     @Override
-    public List<Property> getAvailableProperty() {
-        return propertyRepository.findAllByIsAvailable();
+    public List<Property> getAvailableProperty(Boolean available) {
+        return propertyRepository.findAllByAvailable(available);
     }
 }

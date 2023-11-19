@@ -15,6 +15,6 @@ public interface PropertyService {
     Optional<Property> update(UpdatePropertyResource updatePropertyResource);
     ResponseEntity<?> delete(Long propertyId);
     List<Property> getByAuthor(User author);
-    List<Property> getAvailableProperty();
+    List<Property> getAvailableProperty(Boolean available);
 
 }
