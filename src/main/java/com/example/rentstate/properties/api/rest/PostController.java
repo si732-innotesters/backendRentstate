@@ -93,7 +93,7 @@ public class PostController {
     //comments section
     @PostMapping("/add-comment")
     public ResponseEntity<CommentResponse> addComment(@RequestBody CreateCommentResource createCommentResource){
-        Optional<User> author = userService.getById(createCommentResource.getUserId());
+        Optional<User> author = userService.getById(createCommentResource.getAuthorId());
         Optional<Post> post = postService.getById(createCommentResource.getPostId());
 
         if(author.isEmpty() || post.isEmpty())

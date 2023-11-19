@@ -37,28 +37,11 @@ public class RatingController {
 
         Rating newRating = new Rating(ratedUser.get(), ratedByUser.get(), createRatingResource.getRating());
 
-        try {
-            Optional<Rating> createdRating = ratingService.create(newRating);
-            return createdRating.map(rating ->
-                            ResponseEntity.status(HttpStatus.CREATED).body("Rating created successfully"))
-                    .orElse(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to create rating"));
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        }
+        Optional<Rating> createdRating = ratingService.create(newRating);
+
+        return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("average-rating/{userRaredId}")
-    public ResponseEntity<Integer> getAverageRating(@PathVariable Long userRaredId) {
-        Optional<User> ratedUser = userService.getById(userRaredId);
-
-        if (ratedUser.isEmpty()) {
-            throw new IllegalArgumentException("The user was not found");
-        }
-
-        Integer averageRating = ratingService.getAverageRatingByRatedUser(ratedUser.get());
-
-        return ResponseEntity.ok(averageRating);
-    }
 
 
 }

@@ -6,12 +6,12 @@ import com.example.rentstate.messages.domain.model.entities.Message;
 import com.example.rentstate.messages.domain.service.MessageService;
 import com.example.rentstate.profiles.api.resource.userresource.ResourceUserResponse;
 import com.example.rentstate.profiles.domain.model.aggregates.User;
+import com.example.rentstate.profiles.domain.service.RatingService;
 import com.example.rentstate.profiles.domain.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -23,10 +23,12 @@ public class MessageController {
 
     private final MessageService messageService;
     private final UserService userService;
+    private final RatingService ratingService;
 
-    public MessageController(MessageService messageService, UserService userService) {
+    public MessageController(MessageService messageService, UserService userService, RatingService ratingService) {
         this.messageService = messageService;
         this.userService = userService;
+        this.ratingService = ratingService;
     }
 
     @PostMapping

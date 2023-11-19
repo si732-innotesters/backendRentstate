@@ -10,7 +10,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class CreateCommentResource {
-    private Long userId;
+    private Long authorId;
     private Long postId;
     private String content;
 }

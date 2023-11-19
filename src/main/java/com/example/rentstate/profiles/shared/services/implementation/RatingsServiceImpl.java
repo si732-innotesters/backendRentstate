@@ -11,12 +11,12 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class RatingsRepositoryImpl implements RatingService {
+public class RatingsServiceImpl implements RatingService {
 
     private final RatingRepository ratingsRepository;
     private final UserRepository userRepository;
 
-    public RatingsRepositoryImpl(RatingRepository ratingsRepository, UserRepository userRepository) {
+    public RatingsServiceImpl(RatingRepository ratingsRepository, UserRepository userRepository) {
         this.ratingsRepository = ratingsRepository;
         this.userRepository = userRepository;
     }

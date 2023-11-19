@@ -5,10 +5,12 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+
 @Data
 @Getter
 @NoArgsConstructor
 public class ResourceUserResponse {
+
     private Long id;
     private String name;
     private String lastName;
@@ -17,8 +19,10 @@ public class ResourceUserResponse {
     private String description;
     private Boolean isPremium;
     private String photoUrl;
+    private Integer rankPoints;
 
     public ResourceUserResponse(User user) {
+
         this.id = user.getId();
         this.name = user.getName();
         this.lastName = user.getLastName();
@@ -27,5 +31,6 @@ public class ResourceUserResponse {
         this.description = user.getDescription();
         this.isPremium = user.getIsPremium();
         this.photoUrl = user.getPhotoUrl();
+        this.rankPoints = 5;
     }
 }
