@@ -41,7 +41,4 @@ public class RatingController {
 
         return ResponseEntity.noContent().build();
     }
-
-
-
 }

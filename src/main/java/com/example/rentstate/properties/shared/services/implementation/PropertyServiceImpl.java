@@ -50,7 +50,7 @@ public class PropertyServiceImpl implements PropertyService {
                                 .withName(resource.getName())
                                 .withDescription(resource.getDescription())
                                 .withCategory(resource.getCategory())
-                                .withAvailable(resource.isAvailable())
+                                .withAvailable(resource.getAvailable())
                                 .withCharacteristics(resource.getCharacteristics())
                                 .withLocation(resource.getLocation())
                                 .withUrlImg(resource.getUrlImg())
@@ -67,7 +67,7 @@ public class PropertyServiceImpl implements PropertyService {
     }
 
     @Override
-    public List<Property> getByAuthor(User author) {
+    public List<Property> getAllByAuthor(User author) {
         return propertyRepository.findAllByAuthor(author);
     }
 
@@ -75,7 +75,6 @@ public class PropertyServiceImpl implements PropertyService {
     public List<Property> getAvailableProperty(Boolean available) {
         return propertyRepository.findAllByAvailable(available);
     }
-
 
     @Override
     public ResponseEntity<?> reserveProperty(Property property, User user) {

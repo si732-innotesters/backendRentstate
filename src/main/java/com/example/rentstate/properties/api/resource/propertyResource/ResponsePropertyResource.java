@@ -1,10 +1,15 @@
 package com.example.rentstate.properties.api.resource.propertyResource;
 
+import com.example.rentstate.profiles.api.resource.userresource.ResourceUserResponse;
+import com.example.rentstate.profiles.domain.model.aggregates.User;
 import com.example.rentstate.properties.domain.model.entities.Property;
 import com.example.rentstate.properties.domain.model.valueobjects.Categories;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Data
 @Getter
@@ -17,10 +22,12 @@ public class ResponsePropertyResource {
     private String characteristics;
     private String location;
     private Categories category;
-    private boolean available;
+    private Boolean available;
+    private Boolean isPosted;
     private Long authorId;
     private Long renterId;
     private String urlImg;
+    private Set<ResourceUserResponse> reservedUsers;
 
     public ResponsePropertyResource(Property property) {
         Id = property.getId();
@@ -30,8 +37,12 @@ public class ResponsePropertyResource {
         this.location = property.getLocation();
         this.category = property.getCategory();
         this.available = property.getAvailable();
+        this.isPosted = property.getIsPosted();
         this.urlImg = property.getUrlImg();
         this.authorId = property.getAuthor().getId();
+        this.reservedUsers = property.getReservedByUsers().stream()
+                .map(user -> new ResourceUserResponse(user))
+                .collect(Collectors.toSet());
 
         if (property.getRenter() != null) {
             this.renterId = property.getRenter().getId();

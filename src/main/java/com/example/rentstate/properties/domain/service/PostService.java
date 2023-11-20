@@ -1,6 +1,7 @@
 package com.example.rentstate.properties.domain.service;
 
 import com.example.rentstate.profiles.domain.model.aggregates.User;
+import com.example.rentstate.properties.api.resource.postResource.UpdatePostResource;
 import com.example.rentstate.properties.domain.model.entities.Post;
 import org.springframework.http.ResponseEntity;
 
@@ -11,7 +12,7 @@ public interface PostService {
     Optional<Post> getById(Long postId);
     List<Post> getAllPosts();
     Optional<Post> create(Post post);
-    Optional<Post> update(Post post);
+    Optional<Post> update(UpdatePostResource updatePostResource);
     ResponseEntity<?> delete(Long postId);
-    List<Post> getPostsByAuthor(User author);
+    List<Post> getAllPostsByAuthor (User author);
 }

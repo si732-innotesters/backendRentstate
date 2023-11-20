@@ -66,7 +66,7 @@ public class PropertyController {
             throw new IllegalArgumentException("The author does not exist");
         }
 
-        List<Property> properties = propertyService.getByAuthor(author.get());
+        List<Property> properties = propertyService.getAllByAuthor(author.get());
 
         List<ResponsePropertyResource> resourceList = properties.stream()
                 .map(property -> new ResponsePropertyResource(property))
@@ -95,11 +95,9 @@ public class PropertyController {
 
 
     //reservations
-    @RequestMapping(value = "/reservation/property-id/{propertyId}/user-id/{userId}",
-            method = {RequestMethod.POST, RequestMethod.DELETE})
+    @PostMapping(value = "/reservation/property-id/{propertyId}/user-id/{userId}/{action}")
     public ResponseEntity<?> manageReservation(
-            @PathVariable Long propertyId, @PathVariable Long userId,
-            @RequestParam String action) {
+            @PathVariable Long propertyId, @PathVariable Long userId, @PathVariable String action) {
 
         Optional<Property> property = propertyService.getById(propertyId);
         Optional<User> author = userService.getById(userId);
@@ -115,7 +113,8 @@ public class PropertyController {
             throw new IllegalArgumentException("Invalid action. Use 'add' or 'remove'.");
         }
 
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
     }
+
 
 }

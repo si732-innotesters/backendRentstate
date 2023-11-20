@@ -1,6 +1,7 @@
 package com.example.rentstate.properties.shared.services.implementation;
 
 import com.example.rentstate.profiles.domain.model.aggregates.User;
+import com.example.rentstate.properties.api.resource.postResource.UpdatePostResource;
 import com.example.rentstate.properties.domain.model.entities.Post;
 import com.example.rentstate.properties.domain.service.PostService;
 import com.example.rentstate.properties.infraestructure.persistence.jpa.repositories.PostRepository;
@@ -15,8 +16,10 @@ import java.util.Optional;
 @Service
 public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
-    public PostServiceImpl(PostRepository postRepository) {
+    private final PropertyRepository propertyRepository;
+    public PostServiceImpl(PostRepository postRepository, PropertyRepository propertyRepository) {
         this.postRepository = postRepository;
+        this.propertyRepository = propertyRepository;
     }
 
     @Override
@@ -36,20 +39,26 @@ public class PostServiceImpl implements PostService {
         if(postRepository.existsByProperty(post.getProperty()) ){
             throw new IllegalArgumentException("Post with same property id already exists");
         }
+        post.getProperty().setIsPosted(true);
+        propertyRepository.save(post.getProperty());
         return Optional.of(postRepository.save(post));
     }
 
     @Override
-    public Optional<Post> update( Post post) {
-        return Optional.ofNullable(postRepository.findById(post.getId()).map(newPost->
+    public Optional<Post> update(UpdatePostResource updatePostResource) {
+        return Optional.ofNullable(postRepository.findById(updatePostResource.getId()).map(newPost->
                 postRepository.save(newPost
-                        .withTitle(post.getTitle())
-                        .withPrice(post.getPrice())
-                )).orElseThrow(()->new ResourceNotFoundException("Post", post.getId())));
+                        .withTitle(updatePostResource.getTitle())
+                        .withPrice(updatePostResource.getPrice())
+                )).orElseThrow(()->new ResourceNotFoundException("Post", updatePostResource.getId())));
     }
 
     @Override
     public ResponseEntity<?> delete(Long postId) {
+        var property = postRepository.getById(postId).getProperty();
+        property.setIsPosted(false);
+        propertyRepository.save(property);
+
         return postRepository.findById(postId).map(post -> {
                     postRepository.delete(post);
                     return ResponseEntity.ok().build();})
@@ -57,7 +66,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<Post> getPostsByAuthor(User author) {
+    public List<Post> getAllPostsByAuthor(User author) {
         return postRepository.getAllByPropertyAuthor(author);
     }
 

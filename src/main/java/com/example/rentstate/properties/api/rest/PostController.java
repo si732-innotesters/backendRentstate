@@ -47,6 +47,7 @@ public class PostController {
 
         Post newPost = new Post(property.get(),createPostResource);
         var post = postService.create(newPost);
+
         if(post.isPresent()){
             var postResponse = new PostResponse(post.get());
             return ResponseEntity.status(HttpStatus.CREATED).body(postResponse);
@@ -69,15 +70,20 @@ public class PostController {
         var postResponse = new PostResponse(post.get());
         return ResponseEntity.ok(postResponse);
     }
+    @GetMapping("author-id/{authorId}")
+    public  List<PostResponse> getPostByAuthorId(@PathVariable Long authorId){
+        List<Post> posts = postService.getAllPostsByAuthor(userService.getById(authorId).get());
+        List<PostResponse>postResponseList = posts.stream()
+                .map(post -> new PostResponse(post)).collect(Collectors.toList());
+
+        return  postResponseList;
+    }
+
     @PutMapping
     public ResponseEntity<PostResponse> updatePost(@RequestBody UpdatePostResource updatePostResource){
 
-        Optional<Post> post = postService.getById(updatePostResource.getId());
+        var updatePost = postService.update(updatePostResource);
 
-        if(post.isEmpty())
-            throw new IllegalArgumentException("post nor found");
-
-        var updatePost = postService.update(post.get());
         if(updatePost.isEmpty()){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }

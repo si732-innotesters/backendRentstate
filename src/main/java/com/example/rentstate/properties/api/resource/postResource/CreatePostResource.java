@@ -14,5 +14,4 @@ public class CreatePostResource {
     private Long propertyId;
     private String title;
     private Double price;
-
 }

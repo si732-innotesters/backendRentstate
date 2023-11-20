@@ -31,15 +31,11 @@ public class Rating {
     @Column(nullable = false)
     private int rating;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(nullable = false)
-    private Date createdAt;
 
     public Rating(){}
     public Rating(User ratedUser, User ratedByUser, int rating) {
         this.ratedUser = ratedUser;
         this.ratedByUser = ratedByUser;
         this.rating = rating;
-        this.createdAt = new Date();
     }
 }

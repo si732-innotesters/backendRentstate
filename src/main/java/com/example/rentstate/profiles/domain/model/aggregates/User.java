@@ -1,10 +1,13 @@
 package com.example.rentstate.profiles.domain.model.aggregates;
 
+import com.example.rentstate.profiles.domain.model.entities.Rating;
 import com.example.rentstate.profiles.domain.model.valueobjects.Account;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
+
+import java.util.List;
 
 @Getter
 @Setter

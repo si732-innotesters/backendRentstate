@@ -49,7 +49,10 @@ public class Property {
     private Categories category;
 
     @NotNull
-    private Boolean available;
+    private Boolean available = true;
+
+    @NotNull
+    private Boolean isPosted = false;
 
     private String urlImg;
 
@@ -76,7 +79,8 @@ public class Property {
         this.characteristics = createPropertyResource.getCharacteristics();
         this.location = createPropertyResource.getLocation();
         this.category = createPropertyResource.getCategory();
-        this.available = createPropertyResource.isAvailable();
+        this.available = createPropertyResource.getAvailable();
+        this.isPosted = createPropertyResource.getIsPosted();
         this.urlImg = createPropertyResource.getUrlImg();
         this.renter= renter;
         this.author = author;
