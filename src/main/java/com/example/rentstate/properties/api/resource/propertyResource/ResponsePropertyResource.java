@@ -1,7 +1,6 @@
 package com.example.rentstate.properties.api.resource.propertyResource;
 
-import com.example.rentstate.profiles.api.resource.userresource.ResourceUserResponse;
-import com.example.rentstate.profiles.domain.model.aggregates.User;
+import com.example.rentstate.profiles.api.resource.userresource.ResponseUserResource;
 import com.example.rentstate.properties.domain.model.entities.Property;
 import com.example.rentstate.properties.domain.model.valueobjects.Categories;
 import lombok.Data;
@@ -27,7 +26,7 @@ public class ResponsePropertyResource {
     private Long authorId;
     private Long renterId;
     private String urlImg;
-    private Set<ResourceUserResponse> reservedUsers;
+    private Set<ResponseUserResource> reservedUsers;
 
     public ResponsePropertyResource(Property property) {
         Id = property.getId();
@@ -41,7 +40,7 @@ public class ResponsePropertyResource {
         this.urlImg = property.getUrlImg();
         this.authorId = property.getAuthor().getId();
         this.reservedUsers = property.getReservedByUsers().stream()
-                .map(user -> new ResourceUserResponse(user))
+                .map(user -> new ResponseUserResource(user))
                 .collect(Collectors.toSet());
 
         if (property.getRenter() != null) {

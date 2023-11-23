@@ -2,6 +2,7 @@ package com.example.rentstate.properties.domain.model.entities;
 
 import com.example.rentstate.properties.api.resource.propertyResource.CreatePropertyResource;
 import com.example.rentstate.profiles.domain.model.aggregates.User;
+import com.example.rentstate.properties.api.resource.propertyResource.UpdatePropertyResource;
 import com.example.rentstate.properties.domain.model.valueobjects.Categories;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -65,6 +66,7 @@ public class Property {
     @JoinColumn(name = "author_id")
     private User author;
 
+
     @ManyToMany
     @JoinTable(
             name = "property_reservations",
@@ -80,10 +82,17 @@ public class Property {
         this.location = createPropertyResource.getLocation();
         this.category = createPropertyResource.getCategory();
         this.available = createPropertyResource.getAvailable();
-        this.isPosted = createPropertyResource.getIsPosted();
         this.urlImg = createPropertyResource.getUrlImg();
         this.renter= renter;
         this.author = author;
     }
-
+    public void update(UpdatePropertyResource resource){
+        this.name = resource.getName();
+        this.description = resource.getDescription();
+        this.characteristics = resource.getCharacteristics();
+        this.location = resource.getLocation();
+        this.category = resource.getCategory();
+        this.available = resource.getAvailable();
+        this.urlImg = resource.getUrlImg();
+    }
 }

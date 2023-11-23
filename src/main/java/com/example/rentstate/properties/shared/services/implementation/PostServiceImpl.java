@@ -3,10 +3,13 @@ package com.example.rentstate.properties.shared.services.implementation;
 import com.example.rentstate.profiles.domain.model.aggregates.User;
 import com.example.rentstate.properties.api.resource.postResource.UpdatePostResource;
 import com.example.rentstate.properties.domain.model.entities.Post;
+import com.example.rentstate.properties.domain.model.entities.Property;
 import com.example.rentstate.properties.domain.service.PostService;
 import com.example.rentstate.properties.infraestructure.persistence.jpa.repositories.PostRepository;
 import com.example.rentstate.properties.infraestructure.persistence.jpa.repositories.PropertyRepository;
 import com.example.rentstate.shared.exceptions.ResourceNotFoundException;
+import jakarta.transaction.Transactional;
+import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -14,13 +17,11 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@AllArgsConstructor
 public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
     private final PropertyRepository propertyRepository;
-    public PostServiceImpl(PostRepository postRepository, PropertyRepository propertyRepository) {
-        this.postRepository = postRepository;
-        this.propertyRepository = propertyRepository;
-    }
+
 
     @Override
     public Optional<Post> getById(Long postId) {
@@ -68,6 +69,12 @@ public class PostServiceImpl implements PostService {
     @Override
     public List<Post> getAllPostsByAuthor(User author) {
         return postRepository.getAllByPropertyAuthor(author);
+    }
+
+    @Override
+    @Transactional
+    public void deleteAllPostByProperty(Property property) {
+        postRepository.deleteAllByProperty(property);
     }
 
 }

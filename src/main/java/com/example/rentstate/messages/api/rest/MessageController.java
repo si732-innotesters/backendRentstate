@@ -4,7 +4,7 @@ import com.example.rentstate.messages.api.resource.CreateMessageResource;
 import com.example.rentstate.messages.api.resource.ResponseMessageResource;
 import com.example.rentstate.messages.domain.model.entities.Message;
 import com.example.rentstate.messages.domain.service.MessageService;
-import com.example.rentstate.profiles.api.resource.userresource.ResourceUserResponse;
+import com.example.rentstate.profiles.api.resource.userresource.ResponseUserResource;
 import com.example.rentstate.profiles.domain.model.aggregates.User;
 import com.example.rentstate.profiles.domain.service.RatingService;
 import com.example.rentstate.profiles.domain.service.UserService;
@@ -83,15 +83,15 @@ public class MessageController {
     }
 
     @GetMapping("/chats/{recipientId}")
-    public List<ResourceUserResponse> getNameChats(@PathVariable Long recipientId){
+    public List<ResponseUserResource> getNameChats(@PathVariable Long recipientId){
         Optional<User> user = userService.getById(recipientId);
         if (user.isEmpty()){
             throw new IllegalArgumentException("This user does not exist");
         }
         List<Message> messages = messageService.getChats(user.get());
 
-        List<ResourceUserResponse> chats = messages.stream()
-                .map(message->new ResourceUserResponse(message.getAuthor()))
+        List<ResponseUserResource> chats = messages.stream()
+                .map(message->new ResponseUserResource(message.getAuthor()))
                 .distinct().collect(Collectors.toList());
 
         return chats;

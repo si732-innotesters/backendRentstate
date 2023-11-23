@@ -4,9 +4,12 @@ import com.example.rentstate.properties.api.resource.propertyResource.CreateProp
 import com.example.rentstate.properties.api.resource.propertyResource.ResponsePropertyResource;
 import com.example.rentstate.properties.api.resource.propertyResource.UpdatePropertyResource;
 import com.example.rentstate.properties.domain.model.entities.Property;
+import com.example.rentstate.properties.domain.service.PostService;
 import com.example.rentstate.properties.domain.service.PropertyService;
 import com.example.rentstate.profiles.domain.model.aggregates.User;
 import com.example.rentstate.profiles.domain.service.UserService;
+import jakarta.transaction.Transactional;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,15 +20,13 @@ import java.util.stream.Collectors;
 
 @CrossOrigin(origins = {"*"})
 @RestController
+@AllArgsConstructor
 @RequestMapping(value = "/api/v1/properties", produces = "application/json")
 public class PropertyController {
     private final PropertyService propertyService;
     private final UserService userService;
+    private final PostService postService;
 
-    public PropertyController(PropertyService propertyService, UserService userService) {
-        this.propertyService = propertyService;
-        this.userService = userService;
-    }
 
     @PostMapping
     public ResponseEntity<ResponsePropertyResource> addProperty(
@@ -75,15 +76,21 @@ public class PropertyController {
     }
 
     @PutMapping
-    public ResponseEntity<ResponsePropertyResource> updateUser(
+    @Transactional
+    public ResponseEntity<ResponsePropertyResource> updateProperty(
             @RequestBody UpdatePropertyResource updatePropertyResource) {
 
-        Optional<Property> updatedProperty = propertyService.update(updatePropertyResource);
+        Optional<Property> updatedProperty = propertyService.getById(updatePropertyResource.getId());
 
         if(updatedProperty.isEmpty()){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
-        ResponsePropertyResource propertyResource = new ResponsePropertyResource(updatedProperty.get());
+        updatedProperty.get().update(updatePropertyResource);
+
+        Optional<Property> updated = propertyService.update(updatedProperty.get());
+
+        ResponsePropertyResource propertyResource = new ResponsePropertyResource(updated.get());
+
         return ResponseEntity.ok(propertyResource);
     }
 
@@ -100,16 +107,26 @@ public class PropertyController {
             @PathVariable Long propertyId, @PathVariable Long userId, @PathVariable String action) {
 
         Optional<Property> property = propertyService.getById(propertyId);
-        Optional<User> author = userService.getById(userId);
+        Optional<User> authorReserve = userService.getById(userId);
 
-        if (author.isEmpty() || property.isEmpty())
+        if (authorReserve.isEmpty() || property.isEmpty())
             throw new IllegalArgumentException("Author or Property not found");
 
         if ("add".equalsIgnoreCase(action)) {
-            propertyService.reserveProperty(property.get(), author.get());
+            propertyService.reserveProperty(property.get(), authorReserve.get());
         } else if ("remove".equalsIgnoreCase(action)) {
-            propertyService.cancelReservation(property.get(), author.get());
-        } else {
+            propertyService.cancelReservation(property.get(), authorReserve.get());
+        } else if ("accept".equalsIgnoreCase(action)){
+            property.get().setRenter(authorReserve.get());
+            property.get().setIsPosted(false);
+            property.get().setAvailable(false);
+
+            property.get().getReservedByUsers().clear();
+
+            propertyService.update(property.get());
+            postService.deleteAllPostByProperty(property.get());
+        }
+        else{
             throw new IllegalArgumentException("Invalid action. Use 'add' or 'remove'.");
         }
 

@@ -2,13 +2,12 @@ package com.example.rentstate.profiles.api.rest;
 
 import com.example.rentstate.profiles.api.resource.login.LoginCredential;
 import com.example.rentstate.profiles.api.resource.userresource.CreateUserResource;
-import com.example.rentstate.profiles.api.resource.userresource.ResourceUserResponse;
+import com.example.rentstate.profiles.api.resource.userresource.ResponseUserResource;
 import com.example.rentstate.profiles.api.resource.userresource.UpdateUserResource;
 import com.example.rentstate.profiles.domain.model.aggregates.User;
 import com.example.rentstate.profiles.domain.model.valueobjects.Account;
 import com.example.rentstate.profiles.domain.service.RatingService;
 import com.example.rentstate.profiles.domain.service.UserService;
-import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,27 +22,23 @@ import java.util.stream.Collectors;
 public class UserController {
 
     private final UserService userService;
-    private final ModelMapper modelMapper;
+
     private final RatingService ratingService;
 
-    public UserController(UserService userService, ModelMapper modelMapper, RatingService ratingService) {
+    public UserController(UserService userService, RatingService ratingService) {
         this.userService = userService;
-        this.modelMapper = modelMapper;
         this.ratingService = ratingService;
     }
 
 
     @PostMapping
-    public ResponseEntity<ResourceUserResponse> createUser(@RequestBody CreateUserResource createUserResource) {;
-        User newUser = modelMapper.map(createUserResource, User.class);
-
-        Account account = new Account(createUserResource.getEmail(), createUserResource.getPassword());
-        newUser.setAccount(account);
+    public ResponseEntity<ResponseUserResource> createUser(@RequestBody CreateUserResource createUserResource) {;
+        User newUser = new User(createUserResource);
 
         Optional<User> createdUser = userService.create(newUser);
 
         if (createdUser.isPresent()) {
-            ResourceUserResponse responseUserResource = new ResourceUserResponse(createdUser.get());
+            ResponseUserResource responseUserResource = new ResponseUserResource(createdUser.get());
             return ResponseEntity.status(HttpStatus.CREATED).body(responseUserResource);
         } else {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -51,35 +46,35 @@ public class UserController {
     }
 
     @GetMapping
-    public List<ResourceUserResponse> getAllUsers() {
+    public List<ResponseUserResource> getAllUsers() {
         List<User> users = userService.getAll();
-        List<ResourceUserResponse> responseUsers= users.stream()
-                .map(user -> modelMapper.map(user, ResourceUserResponse.class))
+        List<ResponseUserResource> responseUsers= users.stream()
+                .map(user -> new ResponseUserResource(user))
                 .collect(Collectors.toList());
 
         return responseUsers;
     }
 
     @GetMapping("{userId}")
-    public ResponseEntity<ResourceUserResponse> getUserById(@PathVariable Long userId) {
+    public ResponseEntity<ResponseUserResource> getUserById(@PathVariable Long userId) {
         Optional<User> user = userService.getById(userId);
 
-        ResourceUserResponse userResponse = new ResourceUserResponse(user.get());
+        ResponseUserResource userResponse = new ResponseUserResource(user.get());
         userResponse.setRankPoints(this.ratingService.getAverageRatingByRatedUser(user.get()));
         return ResponseEntity.ok(userResponse);
     }
 
     @PutMapping
-    public ResponseEntity<ResourceUserResponse> updateUser(@RequestBody UpdateUserResource updateUserResource) {
+    public ResponseEntity<ResponseUserResource> updateUser(@RequestBody UpdateUserResource updateUserResource) {
 
-        User userToUpdate = modelMapper.map(updateUserResource, User.class);
+        Optional<User> userToUpdate = userService.getById(updateUserResource.getId());
 
-        Optional<User> userUpdate = userService.update(userToUpdate);
+        if(userToUpdate.isEmpty())
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 
-        if(userUpdate.isEmpty()){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
-        ResourceUserResponse userResponse = new ResourceUserResponse(userUpdate.get());
+        userToUpdate.get().updateUser(updateUserResource);
+
+        ResponseUserResource userResponse = new ResponseUserResource(userToUpdate.get());
         return ResponseEntity.ok(userResponse);
     }
 
@@ -89,13 +84,14 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 
+
     @PostMapping("/login")
-    public ResponseEntity<ResourceUserResponse> login(@RequestBody LoginCredential loginCredential) {
+    public ResponseEntity<ResponseUserResource> login(@RequestBody LoginCredential loginCredential) {
 
         Account account = new Account(loginCredential.getEmail(), loginCredential.getPassword());
 
         Optional<User> user = userService.login(account);
 
-        return ResponseEntity.ok(new ResourceUserResponse(user.get()));
+        return ResponseEntity.ok(new ResponseUserResource(user.get()));
     }
 }

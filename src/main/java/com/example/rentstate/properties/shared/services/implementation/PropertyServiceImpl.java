@@ -8,6 +8,7 @@ import com.example.rentstate.properties.infraestructure.persistence.jpa.reposito
 import com.example.rentstate.profiles.domain.model.aggregates.User;
 import com.example.rentstate.shared.exceptions.ResourceNotFoundException;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -37,26 +38,13 @@ public class PropertyServiceImpl implements PropertyService {
     }
 
     @Override
-    public Optional<Property> update(UpdatePropertyResource resource) {
+    @Transactional
+    public Optional<Property> update(Property property) {
 
-        Optional<Property>property = propertyRepository.findById(resource.getId());
-        Optional<User>renter = userRepository.findById(resource.getRenterId());
-        if(renter.isPresent())
-            property.get().setRenter(renter.get());
-
-        return Optional.ofNullable((property
-                .map(propertyToUpdate ->
-                        propertyRepository.save(propertyToUpdate
-                                .withName(resource.getName())
-                                .withDescription(resource.getDescription())
-                                .withCategory(resource.getCategory())
-                                .withAvailable(resource.getAvailable())
-                                .withCharacteristics(resource.getCharacteristics())
-                                .withLocation(resource.getLocation())
-                                .withUrlImg(resource.getUrlImg())
-                        ))
-                .orElseThrow(()->new ResourceNotFoundException("Property", resource.getId()))));
+        System.out.println(property.getName());
+        return Optional.of(propertyRepository.saveAndFlush(property));
     }
+
 
     @Override
     public ResponseEntity<?> delete(Long propertyId) {

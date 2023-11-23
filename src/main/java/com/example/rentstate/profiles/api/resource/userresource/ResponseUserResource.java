@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @Getter
 @NoArgsConstructor
-public class ResourceUserResponse {
+public class ResponseUserResource {
 
     private Long id;
     private String name;
@@ -21,7 +21,7 @@ public class ResourceUserResponse {
     private String photoUrl;
     private Integer rankPoints;
 
-    public ResourceUserResponse(User user) {
+    public ResponseUserResource(User user) {
 
         this.id = user.getId();
         this.name = user.getName();

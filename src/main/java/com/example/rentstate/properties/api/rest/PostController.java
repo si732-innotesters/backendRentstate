@@ -50,6 +50,9 @@ public class PostController {
 
         if(post.isPresent()){
             var postResponse = new PostResponse(post.get());
+            property.get().setIsPosted(true);
+            propertyService.update(property.get());
+            propertyService.update(property.get());
             return ResponseEntity.status(HttpStatus.CREATED).body(postResponse);
         }else{
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();

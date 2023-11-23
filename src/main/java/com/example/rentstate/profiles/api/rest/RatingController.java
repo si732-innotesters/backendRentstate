@@ -1,7 +1,6 @@
 package com.example.rentstate.profiles.api.rest;
 
 import com.example.rentstate.profiles.api.resource.ratingsresource.CreateRatingResource;
-import com.example.rentstate.profiles.api.resource.userresource.ResourceUserResponse;
 import com.example.rentstate.profiles.domain.model.aggregates.User;
 import com.example.rentstate.profiles.domain.model.entities.Rating;
 import com.example.rentstate.profiles.domain.service.RatingService;

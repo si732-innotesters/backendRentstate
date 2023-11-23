@@ -1,6 +1,7 @@
 package com.example.rentstate.properties.domain.model.entities;
 
 import com.example.rentstate.properties.api.resource.postResource.CreatePostResource;
+import com.example.rentstate.properties.api.resource.propertyResource.UpdatePropertyResource;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
@@ -41,5 +42,7 @@ public class Post {
         this.title = postResource.getTitle();
         this.price = postResource.getPrice();
     }
+
+
 
 }

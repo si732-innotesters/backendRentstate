@@ -7,7 +7,6 @@ import com.example.rentstate.forums.domain.model.entities.ForumQuestion;
 import com.example.rentstate.forums.domain.service.ForumQuestionService;
 import com.example.rentstate.profiles.domain.model.aggregates.User;
 import com.example.rentstate.profiles.domain.service.UserService;
-import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +23,7 @@ public class ForumQuestionController {
     private final ForumQuestionService forumQuestionService;
     private final UserService userService;
 
-    public ForumQuestionController(ForumQuestionService forumQuestionService, ModelMapper modelMapper, UserService userService) {
+    public ForumQuestionController(ForumQuestionService forumQuestionService, UserService userService) {
         this.forumQuestionService = forumQuestionService;
         this.userService = userService;
     }

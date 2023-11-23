@@ -20,6 +20,4 @@ public class UpdatePropertyResource {
     private Categories category;
     private String urlImg;
     private Boolean available;
-    private Boolean isPosted;
-    private Long renterId;
 }

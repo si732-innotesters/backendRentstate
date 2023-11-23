@@ -1,5 +1,7 @@
 package com.example.rentstate.profiles.domain.model.aggregates;
 
+import com.example.rentstate.profiles.api.resource.userresource.CreateUserResource;
+import com.example.rentstate.profiles.api.resource.userresource.UpdateUserResource;
 import com.example.rentstate.profiles.domain.model.entities.Rating;
 import com.example.rentstate.profiles.domain.model.valueobjects.Account;
 import jakarta.persistence.*;
@@ -46,5 +48,20 @@ public class User {
     private Boolean isPremium = false;
 
     private String photoUrl = "";
+
+    public User(CreateUserResource resource){
+        name = resource.getName();
+        lastName = resource.getLastName();
+        account = new Account(resource.getEmail(), resource.getPassword());
+    }
+    public void updateUser(UpdateUserResource resource){
+        this.name = resource.getName();
+        this.lastName = resource.getLastName();
+        this.age = resource.getAge();
+        this.gender = resource.getGender();
+        this.description = resource.getDescription();
+        this.isPremium = resource.getIsPremium();
+        this.photoUrl = resource.getPhotoUrl();
+    }
 
 }

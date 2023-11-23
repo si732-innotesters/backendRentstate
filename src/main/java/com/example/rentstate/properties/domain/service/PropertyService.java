@@ -12,7 +12,7 @@ public interface PropertyService {
 
     Optional<Property> getById(Long propertyId);
     Optional<Property> create(Property property);
-    Optional<Property> update(UpdatePropertyResource updatePropertyResource);
+    Optional<Property> update(Property property);
     ResponseEntity<?> delete(Long propertyId);
     List<Property> getAllByAuthor(User author);
     List<Property> getAvailableProperty(Boolean available);
