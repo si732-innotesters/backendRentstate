@@ -95,7 +95,11 @@ public class PostController {
     }
     @DeleteMapping("{postId}")
     public ResponseEntity<?> deletePost(@PathVariable Long postId){
+        Property property = postService.getById(postId).get().getProperty();
+        property.setIsPosted(false);
+        propertyService.update(property);
         postService.delete(postId);
+
         return ResponseEntity.noContent().build();
     }
 

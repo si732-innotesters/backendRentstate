@@ -1,15 +1,15 @@
 package com.example.rentstate.profiles.api.resource.userresource;
 
 import com.example.rentstate.profiles.domain.model.aggregates.User;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-
 
 @Data
 @Getter
-@NoArgsConstructor
+@AllArgsConstructor
 public class ResponseUserResource {
+
 
     private Long id;
     private String name;

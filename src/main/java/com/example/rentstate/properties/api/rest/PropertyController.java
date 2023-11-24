@@ -118,7 +118,6 @@ public class PropertyController {
             propertyService.cancelReservation(property.get(), authorReserve.get());
         } else if ("accept".equalsIgnoreCase(action)){
             property.get().setRenter(authorReserve.get());
-            property.get().setIsPosted(false);
             property.get().setAvailable(false);
 
             property.get().getReservedByUsers().clear();
