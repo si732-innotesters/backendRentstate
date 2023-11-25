@@ -15,7 +15,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     Boolean existsByProperty(Property property);
     List<Post> getAllByPropertyAuthor(User author);
 
-
     @Transactional
     void deleteAllByProperty(Property property);
+
 }

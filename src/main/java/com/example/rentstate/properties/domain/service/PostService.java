@@ -18,4 +18,5 @@ public interface PostService {
     List<Post> getAllPostsByAuthor (User author);
 
     void deleteAllPostByProperty(Property property);
+
 }

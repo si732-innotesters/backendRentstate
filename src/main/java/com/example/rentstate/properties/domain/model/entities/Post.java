@@ -7,6 +7,7 @@ import jakarta.validation.constraints.*;
 import lombok.*;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -37,10 +38,15 @@ public class Post {
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<Comment> comments = new ArrayList<>();
 
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(nullable = false)
+    private Date createdAt;
+
     public Post(Property property, CreatePostResource postResource) {
         this.property = property;
         this.title = postResource.getTitle();
         this.price = postResource.getPrice();
+        this.createdAt = new Date();
     }
 
 

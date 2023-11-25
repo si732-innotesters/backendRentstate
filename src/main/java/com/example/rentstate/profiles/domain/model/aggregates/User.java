@@ -1,14 +1,17 @@
 package com.example.rentstate.profiles.domain.model.aggregates;
 
-import com.example.rentstate.profiles.api.resource.userresource.CreateUserResource;
 import com.example.rentstate.profiles.api.resource.userresource.UpdateUserResource;
-import com.example.rentstate.profiles.domain.model.entities.Rating;
-import com.example.rentstate.profiles.domain.model.valueobjects.Account;
+import com.example.rentstate.profiles.domain.model.valueobjects.Role;
+import com.example.rentstate.security.auth.resource.RegisterRequest;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.Collection;
 import java.util.List;
 
 @Getter
@@ -18,7 +21,7 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name ="users")
-public class User {
+public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,8 +35,15 @@ public class User {
     @Size(min=2, max=50, message = "The last name must have at least 2 characters and a maximum of 50")
     private String lastName;
 
-    @Embedded
-    private Account account;
+    @NotNull
+    private String email;
+
+    @NotNull
+    @Column(unique = true)
+    private String username;
+
+    @NotNull
+    private String password;
 
     @NotNull
     private Integer age = 18;
@@ -49,11 +59,17 @@ public class User {
 
     private String photoUrl = "";
 
-    public User(CreateUserResource resource){
-        name = resource.getName();
-        lastName = resource.getLastName();
-        account = new Account(resource.getEmail(), resource.getPassword());
+    private Role role;
+
+   public User(RegisterRequest registerRequest){
+        name = registerRequest.getName();
+        lastName = registerRequest.getLastName();
+        email = registerRequest.getUsername();
+        username = registerRequest.getUsername();
+        password = registerRequest.getPassword();
+        role=Role.USER;
     }
+
     public void updateUser(UpdateUserResource resource){
         this.name = resource.getName();
         this.lastName = resource.getLastName();
@@ -64,4 +80,30 @@ public class User {
         this.photoUrl = resource.getPhotoUrl();
     }
 
+
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority((role.name())));
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }

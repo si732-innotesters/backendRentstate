@@ -17,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -58,14 +59,25 @@ public class PostController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
-    @GetMapping
-    public List<PostResponse> getAll() {
-        List<Post>posts = postService.getAllPosts();
+    @GetMapping()
+    public ResponseEntity<List<PostResponse>> getAll() {
+        List<Post> posts = postService.getAllPosts();
 
-        List<PostResponse> responseList = posts.stream()
-                .map(post -> new PostResponse(post)).collect(Collectors.toList());
+        posts.sort(Comparator.comparing(Post::getCreatedAt).reversed());
 
-        return responseList;
+        List<Post> premiumPosts = posts.stream()
+                .filter(post -> post.getProperty().getAuthor().getIsPremium())
+                .sorted(Comparator.comparing(Post::getCreatedAt).reversed())
+                .collect(Collectors.toList());
+
+        posts.removeAll(premiumPosts);
+        premiumPosts.addAll(posts);
+
+        List<PostResponse> responseList = premiumPosts.stream()
+                .map(PostResponse::new)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(responseList);
     }
     @GetMapping("{postId}")
     public  ResponseEntity<PostResponse> getPostById(@PathVariable Long postId){

@@ -69,6 +69,7 @@ public class PropertyServiceImpl implements PropertyService {
 
         property.getReservedByUsers().add(user);
         propertyRepository.save(property);
+
         return ResponseEntity.noContent().build();
     }
 

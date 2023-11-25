@@ -77,4 +77,5 @@ public class PostServiceImpl implements PostService {
         postRepository.deleteAllByProperty(property);
     }
 
+
 }

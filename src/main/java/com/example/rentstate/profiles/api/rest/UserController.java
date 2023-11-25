@@ -1,11 +1,8 @@
 package com.example.rentstate.profiles.api.rest;
 
-import com.example.rentstate.profiles.api.resource.login.LoginCredential;
-import com.example.rentstate.profiles.api.resource.userresource.CreateUserResource;
 import com.example.rentstate.profiles.api.resource.userresource.ResponseUserResource;
 import com.example.rentstate.profiles.api.resource.userresource.UpdateUserResource;
 import com.example.rentstate.profiles.domain.model.aggregates.User;
-import com.example.rentstate.profiles.domain.model.valueobjects.Account;
 import com.example.rentstate.profiles.domain.service.RatingService;
 import com.example.rentstate.profiles.domain.service.UserService;
 import org.springframework.http.HttpStatus;
@@ -30,20 +27,6 @@ public class UserController {
         this.ratingService = ratingService;
     }
 
-
-    @PostMapping
-    public ResponseEntity<ResponseUserResource> createUser(@RequestBody CreateUserResource createUserResource) {;
-        User newUser = new User(createUserResource);
-
-        Optional<User> createdUser = userService.create(newUser);
-
-        if (createdUser.isPresent()) {
-            ResponseUserResource responseUserResource = new ResponseUserResource(createdUser.get());
-            return ResponseEntity.status(HttpStatus.CREATED).body(responseUserResource);
-        } else {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
-    }
 
     @GetMapping
     public List<ResponseUserResource> getAllUsers() {
@@ -73,7 +56,7 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 
         userToUpdate.get().updateUser(updateUserResource);
-
+        userService.update(userToUpdate.get());
         ResponseUserResource userResponse = new ResponseUserResource(userToUpdate.get());
         return ResponseEntity.ok(userResponse);
     }
@@ -84,14 +67,4 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 
-
-    @PostMapping("/login")
-    public ResponseEntity<ResponseUserResource> login(@RequestBody LoginCredential loginCredential) {
-
-        Account account = new Account(loginCredential.getEmail(), loginCredential.getPassword());
-
-        Optional<User> user = userService.login(account);
-
-        return ResponseEntity.ok(new ResponseUserResource(user.get()));
-    }
 }

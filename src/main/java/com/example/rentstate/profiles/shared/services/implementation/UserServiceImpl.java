@@ -1,7 +1,6 @@
 package com.example.rentstate.profiles.shared.services.implementation;
 
 import com.example.rentstate.profiles.domain.model.aggregates.User;
-import com.example.rentstate.profiles.domain.model.valueobjects.Account;
 import com.example.rentstate.profiles.domain.service.UserService;
 import com.example.rentstate.profiles.infrastructure.persistence.jpa.repositories.UserRepository;
 import com.example.rentstate.shared.exceptions.ResourceNotFoundException;
@@ -32,16 +31,6 @@ public class UserServiceImpl implements UserService {
         return userRepository.findAll();
     }
 
-    @Override
-    public Optional<User> create(User user) {
-        String email = user.getAccount().email();
-        Optional<User> userExistWithEmail = userRepository.findByAccount_Email(email);
-        if (!userExistWithEmail.isEmpty())
-            throw new IllegalArgumentException("User with email " + email + " already exists");
-
-        return Optional.of(userRepository.save(user));
-    }
-
 
     @Override
     public Optional<User> update(User user) {
@@ -66,10 +55,4 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new ResourceNotFoundException("User", userId));
     }
 
-    @Override
-    public Optional<User> login(Account account) {
-        Optional<User> user = userRepository.findByAccount(account);
-
-        return user;
-    }
 }
