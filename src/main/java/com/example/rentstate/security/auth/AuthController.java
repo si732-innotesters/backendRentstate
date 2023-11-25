@@ -6,9 +6,9 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin(origins = {"http://localhost:4200"})
+@CrossOrigin(origins = {"http://localhost:4200","https://renstate2-0.web.app"})
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/auth/api")
 @AllArgsConstructor
 public class AuthController {
 
@@ -22,7 +22,7 @@ public class AuthController {
 
     }
 
-    @PostMapping("register")
+    @PostMapping("/register")
     public ResponseEntity<AuthResponse> register(@RequestBody RegisterRequest registerRequest){
         return ResponseEntity.ok(
                 authService.register(registerRequest)

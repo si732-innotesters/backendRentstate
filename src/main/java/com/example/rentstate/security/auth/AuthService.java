@@ -45,5 +45,6 @@ public class AuthService {
                 .token(jwtService.getToken(user))
                 .userId(user.getId())
                 .build();
+
     }
 }
