@@ -10,8 +10,8 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @AllArgsConstructor
@@ -67,13 +67,13 @@ public class Property {
     private User author;
 
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "property_reservations",
             joinColumns = @JoinColumn(name = "property_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
-    private Set<User> reservedByUsers = new HashSet<>();
+    private List<User> reservedByUsers = new ArrayList<>();
 
     public Property(User author, User renter, CreatePropertyResource createPropertyResource) {
         this.name = createPropertyResource.getName();

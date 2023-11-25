@@ -64,6 +64,11 @@ public class PropertyServiceImpl implements PropertyService {
         return propertyRepository.findAllByAvailable(available);
     }
 
+
+    public List<User> getReservedUsersForProperty(Long propertyId) {
+        return propertyRepository.findReservedUsersById(propertyId);
+    }
+
     @Override
     public ResponseEntity<?> reserveProperty(Property property, User user) {
 

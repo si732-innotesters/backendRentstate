@@ -12,4 +12,7 @@ public interface PropertyRepository extends JpaRepository<Property, Long> {
     List<Property> findAllByAuthor(User author);
     List<Property> findAllByAvailable (boolean available);
 
+    List<User> findReservedUsersById(Long propertyId);
+
+
 }

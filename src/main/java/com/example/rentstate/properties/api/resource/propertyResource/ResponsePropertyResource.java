@@ -7,15 +7,17 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+
 
 @Data
 @Getter
 @NoArgsConstructor
 public class ResponsePropertyResource {
 
-    private Long Id;
+    private Long id;
     private String name;
     private String description;
     private String characteristics;
@@ -26,10 +28,10 @@ public class ResponsePropertyResource {
     private Long authorId;
     private Long renterId;
     private String urlImg;
-    private Set<ResponseUserResource> reservedUsers;
+    private List<ResponseUserResource> reservedUsers;
 
     public ResponsePropertyResource(Property property) {
-        Id = property.getId();
+        this.id = property.getId();
         this.name = property.getName();
         this.description = property.getDescription();
         this.characteristics = property.getCharacteristics();
@@ -39,15 +41,21 @@ public class ResponsePropertyResource {
         this.isPosted = property.getIsPosted();
         this.urlImg = property.getUrlImg();
         this.authorId = property.getAuthor().getId();
+
         this.reservedUsers = property.getReservedByUsers().stream()
                 .map(user -> new ResponseUserResource(user))
-                .collect(Collectors.toSet());
+                .collect(Collectors.toList());
+
 
         if (property.getRenter() != null) {
             this.renterId = property.getRenter().getId();
-        }else{
+        } else {
             this.renterId = null;
         }
     }
 
+    public ResponsePropertyResource setReservedUsers(List<ResponseUserResource> reservedUsers) {
+        this.reservedUsers = reservedUsers;
+        return this;
+    }
 }
