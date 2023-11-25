@@ -32,6 +32,7 @@ public class AuthService {
 
         return AuthResponse.builder()
                 .token(token)
+                .userId(userRepository.findByUsername(loginRequest.getUsername()).get().getId())
                 .build();
     }
 
@@ -42,6 +43,7 @@ public class AuthService {
 
         return AuthResponse.builder()
                 .token(jwtService.getToken(user))
+                .userId(user.getId())
                 .build();
     }
 }

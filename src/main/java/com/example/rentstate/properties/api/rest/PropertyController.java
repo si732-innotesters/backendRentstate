@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-@CrossOrigin(origins = {"*"})
+@CrossOrigin(origins = {"http://localhost:4200"})
 @RestController
 @AllArgsConstructor
 @RequestMapping(value = "/api/v1/properties", produces = "application/json")
