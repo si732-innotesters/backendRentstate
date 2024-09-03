@@ -66,7 +66,6 @@ public class Property {
     @JoinColumn(name = "author_id")
     private User author;
 
-
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "property_reservations",
@@ -86,6 +85,7 @@ public class Property {
         this.renter= renter;
         this.author = author;
     }
+
     public void update(UpdatePropertyResource resource){
         this.name = resource.getName();
         this.description = resource.getDescription();
@@ -94,5 +94,31 @@ public class Property {
         this.category = resource.getCategory();
         this.available = resource.getAvailable();
         this.urlImg = resource.getUrlImg();
+    }
+
+    public void checkRentStatus(boolean isPosted, boolean isAvailable) {
+        if (isPosted && isAvailable) {
+            System.out.println("The property can be rented.");
+        } else if (isPosted && !isAvailable) {
+            System.out.println("The property cannot be rented because someone else has rented it.");
+        } else {
+            System.out.println("The property is not posted.");
+        }
+    }
+
+    public void setPostedStatus(boolean isPosted) {
+        this.isPosted = isPosted;
+    }
+
+    public void setAvailableStatus(boolean isAvailable) {
+        this.available = isAvailable;
+    }
+
+    public Boolean getIsPosted() {
+        return isPosted;
+    }
+
+    public Boolean getAvailable() {
+        return available;
     }
 }
