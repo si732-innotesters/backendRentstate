@@ -102,6 +102,21 @@ public class Property {
         this.author = author;
         this.price = price;
     }
+    private boolean hasSufficientFunds(User renter) {
+        return renterHasFundsForPropertyRent(renter, this);
+    }
+    public boolean cancelReservation(User user) {
+        if (this.renter == null || !this.renter.equals(user)) {
+            System.out.println("El usuario no ha reservado esta propiedad.");
+            return false;
+        }
+
+        this.renter = null;
+        this.available = true;
+        System.out.println("La reserva de la propiedad ha sido cancelada por " + user.getName() + ".");
+        return true;
+    }
+
 
     public void update(UpdatePropertyResource resource){
         this.name = resource.getName();
@@ -185,18 +200,5 @@ public class Property {
             return false;
         }
     }
-    private boolean hasSufficientFunds(User renter) {
-        return renterHasFundsForPropertyRent(renter, this);
-    }
-    public boolean cancelReservation(User user) {
-        if (this.renter == null || !this.renter.equals(user)) {
-            System.out.println("El usuario no ha reservado esta propiedad.");
-            return false;
-        }
 
-        this.renter = null;
-        this.available = true;
-        System.out.println("La reserva de la propiedad ha sido cancelada por " + user.getName() + ".");
-        return true;
-    }
 }
