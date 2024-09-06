@@ -17,7 +17,6 @@ import java.util.List;
 @Getter
 @Setter
 @With
-@NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name ="users")
@@ -61,6 +60,8 @@ public class User implements UserDetails {
 
     private Role role;
 
+    private double money;
+
    public User(RegisterRequest registerRequest){
         name = registerRequest.getName();
         lastName = registerRequest.getLastName();
@@ -80,7 +81,15 @@ public class User implements UserDetails {
         this.photoUrl = resource.getPhotoUrl();
     }
 
+    public User() {
+        this.name="default";
+    }
 
+    public User(String name, boolean isPremium, double money) {
+        this.name = name;
+        this.isPremium = isPremium;
+        this.money = money;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

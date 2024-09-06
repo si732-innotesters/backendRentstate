@@ -8,6 +8,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import jdk.jfr.Category;
 import lombok.*;
 
 import java.util.ArrayList;
@@ -50,6 +51,9 @@ public class Property {
     private Categories category;
 
     @NotNull
+    private double price;
+
+    @NotNull
     private Boolean available = true;
 
     @NotNull
@@ -86,6 +90,20 @@ public class Property {
         this.author = author;
     }
 
+    public Property(String name, String description, String characteristics, String location, Categories category, Boolean available, Boolean isPosted, String urlImg, User renter, User author, double price) {
+        this.name = name;
+        this.description = description;
+        this.characteristics = characteristics;
+        this.location = location;
+        this.category = category;
+        this.available = available;
+        this.isPosted = isPosted;
+        this.urlImg = urlImg;
+        this.renter = renter;
+        this.author = author;
+        this.price = price;
+    }
+
     public void update(UpdatePropertyResource resource){
         this.name = resource.getName();
         this.description = resource.getDescription();
@@ -96,29 +114,77 @@ public class Property {
         this.urlImg = resource.getUrlImg();
     }
 
-    public void checkRentStatus(boolean isPosted, boolean isAvailable) {
-        if (isPosted && isAvailable) {
-            System.out.println("The property can be rented.");
-        } else if (isPosted && !isAvailable) {
-            System.out.println("The property cannot be rented because someone else has rented it.");
+    public boolean checkRentStatus() {
+        if (this.isPosted && this.available) {
+            System.out.println("La propiedad puede ser rentada");
+            return true;
+        } else if (this.isPosted && !this.available) {
+            System.out.println("La propiedad no puede ser rentada porque alguien mas ya la está ocupando.");
+            return false;
         } else {
-            System.out.println("The property is not posted.");
+            System.out.println("La propiedad no está publicada.");
+            return false;
         }
     }
 
-    public void setPostedStatus(boolean isPosted) {
-        this.isPosted = isPosted;
+
+    public static boolean hasDuplicateProperties(User user, List<Property> properties) {
+        for (int i = 0; i < properties.size(); i++) {
+            Property property1 = properties.get(i);
+            if (property1.getAuthor().equals(user)) {
+                for (int j = i + 1; j < properties.size(); j++) {
+                    Property property2 = properties.get(j);
+                    if (property2.getAuthor().equals(user) &&
+                            property1.getName().equals(property2.getName()) &&
+                            property1.getDescription().equals(property2.getDescription()) &&
+                            property1.getLocation().equals(property2.getLocation())) {
+                        System.out.println("Revisar al usuario autor: " + user.getName());
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
-    public void setAvailableStatus(boolean isAvailable) {
-        this.available = isAvailable;
+    public boolean rentProperty(User newRenter,boolean availableProperty) {
+        if (!availableProperty) {
+            System.out.println("No se puede alquilar la propiedad porque no está disponible para alquilar.");
+            return false;
+        }
+
+        if (!hasSufficientFunds(newRenter)) {
+            System.out.println("El inquilino no tiene fondos suficientes para alquilar la propiedad.");
+            return false;
+        }
+
+        this.renter = newRenter;
+        this.available = false;
+        System.out.println("La propiedad ha sido alquilada a " + newRenter.getName() + ".");
+        return true;
     }
 
-    public Boolean getIsPosted() {
-        return isPosted;
+    public static boolean renterHasFundsForPropertyRent(User renter, Property property) {
+        double propertyPrice = property.getPrice();
+        double discountFactor = 1;
+
+        if (renter.getIsPremium()) {
+            discountFactor = 0.70;
+        }
+        System.out.println(discountFactor);
+        double finalPrice = propertyPrice * discountFactor;
+
+        System.out.println(finalPrice);
+        if (renter.getMoney() >= finalPrice) {
+            System.out.println(renter.getName() + " tiene suficiente dinero para alquilar la propiedad.");
+            return true;
+        } else {
+            System.out.println(renter.getName() + " no tiene suficiente dinero para alquilar la propiedad.");
+            return false;
+        }
     }
 
-    public Boolean getAvailable() {
-        return available;
+    private boolean hasSufficientFunds(User renter) {
+        return renterHasFundsForPropertyRent(renter, this);
     }
 }
