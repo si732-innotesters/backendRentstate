@@ -8,7 +8,6 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import jdk.jfr.Category;
 import lombok.*;
 
 import java.util.ArrayList;
@@ -127,7 +126,6 @@ public class Property {
         }
     }
 
-
     public static boolean hasDuplicateProperties(User user, List<Property> properties) {
         for (int i = 0; i < properties.size(); i++) {
             Property property1 = properties.get(i);
@@ -147,13 +145,13 @@ public class Property {
         return false;
     }
 
-    public boolean rentProperty(User newRenter,boolean availableProperty) {
+    public boolean rentProperty(User newRenter, boolean availableProperty) {
         if (!availableProperty) {
             System.out.println("No se puede alquilar la propiedad porque no está disponible para alquilar.");
             return false;
         }
 
-        if (!hasSufficientFunds(newRenter)) {
+        if (!renterHasFundsForPropertyRent(newRenter, this)) {
             System.out.println("El inquilino no tiene fondos suficientes para alquilar la propiedad.");
             return false;
         }
@@ -165,16 +163,18 @@ public class Property {
     }
 
     public static boolean renterHasFundsForPropertyRent(User renter, Property property) {
+        if (!property.checkRentStatus()) {
+            return false;
+        }
+
         double propertyPrice = property.getPrice();
         double discountFactor = 1;
 
         if (renter.getIsPremium()) {
             discountFactor = 0.70;
         }
-        System.out.println(discountFactor);
         double finalPrice = propertyPrice * discountFactor;
 
-        System.out.println(finalPrice);
         if (renter.getMoney() >= finalPrice) {
             System.out.println(renter.getName() + " tiene suficiente dinero para alquilar la propiedad.");
             return true;
@@ -183,7 +183,6 @@ public class Property {
             return false;
         }
     }
-
     private boolean hasSufficientFunds(User renter) {
         return renterHasFundsForPropertyRent(renter, this);
     }

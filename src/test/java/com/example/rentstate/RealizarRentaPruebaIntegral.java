@@ -45,14 +45,9 @@ public class RealizarRentaPruebaIntegral {
         Mockito.when(renter.getMoney()).thenReturn(70.0);
         Mockito.when(renter.getIsPremium()).thenReturn(true);
 
-        boolean rentStatus = property.checkRentStatus();
-        assertTrue(rentStatus);
 
-        boolean fundsCheck = Property.renterHasFundsForPropertyRent(renter, property);
-        assertTrue(fundsCheck);
 
         boolean result = property.rentProperty(renter, property.getAvailable());
-
         assertTrue(result);
 
         assertEquals(renter, property.getRenter());
