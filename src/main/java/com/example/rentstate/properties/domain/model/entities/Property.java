@@ -113,18 +113,7 @@ public class Property {
         this.urlImg = resource.getUrlImg();
     }
 
-    public boolean checkRentStatus() {
-        if (this.isPosted && this.available) {
-            System.out.println("La propiedad puede ser rentada");
-            return true;
-        } else if (this.isPosted && !this.available) {
-            System.out.println("La propiedad no puede ser rentada porque alguien mas ya la está ocupando.");
-            return false;
-        } else {
-            System.out.println("La propiedad no está publicada.");
-            return false;
-        }
-    }
+
 
     public static boolean hasDuplicateProperties(User user, List<Property> properties) {
         for (int i = 0; i < properties.size(); i++) {
@@ -162,6 +151,19 @@ public class Property {
         return true;
     }
 
+    public boolean checkRentStatus() {
+        if (this.isPosted && this.available) {
+            System.out.println("La propiedad puede ser rentada");
+            return true;
+        } else if (this.isPosted && !this.available) {
+            System.out.println("La propiedad no puede ser rentada porque alguien mas ya la está ocupando.");
+            return false;
+        } else {
+            System.out.println("La propiedad no está publicada.");
+            return false;
+        }
+    }
+
     public static boolean renterHasFundsForPropertyRent(User renter, Property property) {
         if (!property.checkRentStatus()) {
             return false;
@@ -185,5 +187,16 @@ public class Property {
     }
     private boolean hasSufficientFunds(User renter) {
         return renterHasFundsForPropertyRent(renter, this);
+    }
+    public boolean cancelReservation(User user) {
+        if (this.renter == null || !this.renter.equals(user)) {
+            System.out.println("El usuario no ha reservado esta propiedad.");
+            return false;
+        }
+
+        this.renter = null;
+        this.available = true;
+        System.out.println("La reserva de la propiedad ha sido cancelada por " + user.getName() + ".");
+        return true;
     }
 }
