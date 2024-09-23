@@ -6,7 +6,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin(origins = {"http://localhost:4200","https://renstate2-0.web.app"})
+@CrossOrigin(origins = {"http://localhost:4200","https://rentstate-second-firebase.web.app"})
 @RestController
 @RequestMapping("/auth/api")
 @AllArgsConstructor
