@@ -75,7 +75,6 @@ public class PruebaFuncionalAñadirPropiedad {
         String currentUrl = driver.getCurrentUrl();
         assertEquals("http://localhost:4200/your-properties/1", currentUrl);
 
-        // Rellenar los campos de texto
         WebElement nameField = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("input[formcontrolname='name']")));
         nameField.sendKeys("Cuarto Vender Rápido (San Miguel)");
 
@@ -125,8 +124,6 @@ public class PruebaFuncionalAñadirPropiedad {
         Thread.sleep(5000);
 
 
-        WebElement addedPropertyRow = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//td[text()='asfasfa']"))); // Verifica el nombre
-        assertNotNull(addedPropertyRow);
 
         WebElement categoryCell = driver.findElement(By.xpath("//td[text()='Cuarto Vender Rápido (San Miguel)']/following-sibling::td[text()='room']"));
         assertNotNull(categoryCell);
