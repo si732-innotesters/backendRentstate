@@ -30,7 +30,7 @@ public class PruebaFuncionalAñadirPropiedad {
         driver = new ChromeDriver();
         js = (JavascriptExecutor) driver;
         vars = new HashMap<>();
-        wait = new WebDriverWait(driver, Duration.ofSeconds(10));  // Espera explícita de 10 segundos
+        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         driver.manage().window().setSize(new Dimension(974, 1040));
     }
 
@@ -77,7 +77,7 @@ public class PruebaFuncionalAñadirPropiedad {
 
         // Rellenar los campos de texto
         WebElement nameField = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("input[formcontrolname='name']")));
-        nameField.sendKeys("Cuarto Vender Rápido (San Miguel)");  // Nombre que se espera encontrar después
+        nameField.sendKeys("Cuarto Vender Rápido (San Miguel)");
 
         WebElement descriptionField = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("textarea[formcontrolname='description']")));
         descriptionField.sendKeys("Cuarto ubicado en Lima Perú, cerca a la universidad UPC de sede San Miguel");

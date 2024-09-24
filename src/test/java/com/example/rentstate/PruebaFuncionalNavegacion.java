@@ -21,7 +21,7 @@ public class PruebaFuncionalNavegacion {
     public void setUp() {
         System.setProperty("webdriver.chrome.driver", "chromedriver-win64/chromedriver.exe");
         driver = new ChromeDriver();
-        wait = new WebDriverWait(driver, Duration.ofSeconds(10)); // Espera hasta 10 segundos
+        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         driver.manage().window().setSize(new Dimension(1920, 1039));
     }
 
