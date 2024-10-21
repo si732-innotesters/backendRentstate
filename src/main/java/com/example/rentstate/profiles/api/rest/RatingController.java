@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
-@CrossOrigin(origins = {"http://localhost:4200","https://renstate2-0.web.app"})
+@CrossOrigin(origins = {"http://localhost:4200","https://rentstate-second-firebase.web.app"})
 @RestController
 @RequestMapping(value = "/api/v1/ratings", produces = "application/json")
 public class RatingController {

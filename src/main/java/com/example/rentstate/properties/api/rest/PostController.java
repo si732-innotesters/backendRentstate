@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-@CrossOrigin(origins = {"http://localhost:4200","https://renstate2-0.web.app"})
+@CrossOrigin(origins = {"http://localhost:4200","https://rentstate-second-firebase.web.app"})
 @RestController
 @RequestMapping(value = "/api/v1/posts", produces = "application/json")
 public class PostController {
