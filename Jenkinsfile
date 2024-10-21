@@ -6,7 +6,7 @@ pipeline {
     }
 
     stages {
-        stage ('Compile Stage 2023-02') {
+        stage ('Compile Stage 2024-02') {
             steps {
                 withMaven(maven: 'maven_3_9_9') {
                     script {
@@ -20,7 +20,7 @@ pipeline {
             }
         }
 
-        stage ('Testing Stage 2023-02') {
+        stage ('Testing Stage 2024-02') {
             steps {
                 withMaven(maven: 'maven_3_9_9') {
                     script {
@@ -49,7 +49,7 @@ pipeline {
             }
         }*/
 
-        stage ('Package Stage 2023-2') {
+        stage ('Package Stage 2024-2') {
             steps {
                 withMaven(maven: 'maven_3_9_9') {
                     script {
