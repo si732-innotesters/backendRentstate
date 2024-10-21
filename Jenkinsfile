@@ -9,7 +9,13 @@ pipeline {
         stage ('Compile Stage 2023-02') {
             steps {
                 withMaven(maven: 'maven_3_9_9') {
-                    sh 'mvn clean compile'
+                    script {
+                        if (isUnix()) {
+                            sh 'mvn clean compile'
+                        } else {
+                            bat 'mvn clean compile'
+                        }
+                    }
                 }
             }
         }
@@ -17,7 +23,13 @@ pipeline {
         stage ('Testing Stage 2023-02') {
             steps {
                 withMaven(maven: 'maven_3_9_9') {
-                    sh 'mvn test'
+                    script {
+                        if (isUnix()) {
+                            sh 'mvn test'
+                        } else {
+                            bat 'mvn test'
+                        }
+                    }
                 }
             }
         }
@@ -26,7 +38,13 @@ pipeline {
         /*stage ('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv('sonarLocal') {
-                    sh 'mvn clean verify sonar:sonar -Dsonar.projectKey=one'
+                    script {
+                        if (isUnix()) {
+                            sh 'mvn clean verify sonar:sonar -Dsonar.projectKey=one'
+                        } else {
+                            bat 'mvn clean verify sonar:sonar -Dsonar.projectKey=one'
+                        }
+                    }
                 }
             }
         }*/
@@ -34,7 +52,13 @@ pipeline {
         stage ('Package Stage 2023-2') {
             steps {
                 withMaven(maven: 'maven_3_9_9') {
-                    sh 'mvn package'
+                    script {
+                        if (isUnix()) {
+                            sh 'mvn package'
+                        } else {
+                            bat 'mvn package'
+                        }
+                    }
                 }
             }
         }
@@ -44,7 +68,13 @@ pipeline {
             steps {
                 echo "Running ${env.BUILD_ID} on ${env.JENKINS_URL} at ${env.WORKSPACE}"
                 withMaven(maven: 'maven_3_9_9') {
-                    sh '"C:\\Program Files\\Git\\mingw64\\bin\\curl.exe" -T ".\\target\\sistema-ventas-spring.war" "http://tomcat:tomcat@localhost:9090/manager/text/deploy?path=/sistema-ventas-spring&update=true"'
+                    script {
+                        if (isUnix()) {
+                            sh 'curl -T ./target/sistema-ventas-spring.war "http://tomcat:tomcat@localhost:9090/manager/text/deploy?path=/sistema-ventas-spring&update=true"'
+                        } else {
+                            bat '"C:\\Program Files\\Git\\mingw64\\bin\\curl.exe" -T ".\\target\\sistema-ventas-spring.war" "http://tomcat:tomcat@localhost:9090/manager/text/deploy?path=/sistema-ventas-spring&update=true"'
+                        }
+                    }
                 }
             }
         }*/
