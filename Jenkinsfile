@@ -23,7 +23,7 @@ pipeline {
         }
 
         // Puedes descomentar este bloque si configuras SonarQube en el futuro.
-        /*stage ('sonarQube Analysis') {
+        /*stage ('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv('sonarLocal') {
                     sh 'mvn clean verify sonar:sonar -Dsonar.projectKey=one'
