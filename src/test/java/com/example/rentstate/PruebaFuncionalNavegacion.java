@@ -16,7 +16,7 @@ import java.time.Duration;
 public class PruebaFuncionalNavegacion {
     private WebDriver driver;
     private WebDriverWait wait;
-//Comentario
+//ComentarioDos
     @Before
     public void setUp() {
         System.setProperty("webdriver.chrome.driver", "chromedriver-win64/chromedriver.exe");
