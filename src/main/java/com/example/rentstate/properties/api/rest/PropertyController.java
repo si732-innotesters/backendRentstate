@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 @CrossOrigin(origins = {"http://localhost:4200","https://rentstate-second-firebase.web.app"})
 @RestController
 @AllArgsConstructor
-@RequestMapping(value = "/api/v1/properties", produces = "application/json")
+@RequestMapping(value = "/api/v1/propiedades", produces = "application/json")
 public class PropertyController {
     private final PropertyService propertyService;
     private final UserService userService;
